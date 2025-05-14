@@ -6,7 +6,7 @@
 #define CS_API __declspec(dllimport)
 #endif
 
-struct CS_API TestClass
+struct TestClass
 {
 	TestClass(int a, std::string str);
 
