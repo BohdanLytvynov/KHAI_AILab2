@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ContourSearcher.BLL\ContourSearcher.BLL\ContourSearcher.BLL.vcxproj" />
+    <ProjectReference Include="..\MVVMBase\MVVMBase.csproj" />
+    <ProjectReference Include="..\UserControls\UserControls.csproj" />
   </ItemGroup>
 
 </Project>

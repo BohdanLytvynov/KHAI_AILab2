@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContourSearcher.UI", "ContourSearcher.UI.csproj", "{96B5CA76-1375-4424-96B3-A8EA2EA6E8F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ContourSearcher.BLL", "..\..\ContourSearcher.BLL\ContourSearcher.BLL\ContourSearcher.BLL.vcxproj", "{28A12B55-3009-4E14-AD20-7EA67B09DD0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVMBase", "..\MVVMBase\MVVMBase.csproj", "{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserControls", "..\UserControls\UserControls.csproj", "{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,30 @@ Global
 		{28A12B55-3009-4E14-AD20-7EA67B09DD0C}.Release|x64.Build.0 = Release|x64
 		{28A12B55-3009-4E14-AD20-7EA67B09DD0C}.Release|x86.ActiveCfg = Release|Win32
 		{28A12B55-3009-4E14-AD20-7EA67B09DD0C}.Release|x86.Build.0 = Release|Win32
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Debug|x64.Build.0 = Debug|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Debug|x86.Build.0 = Debug|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Release|x64.ActiveCfg = Release|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Release|x64.Build.0 = Release|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Release|x86.ActiveCfg = Release|Any CPU
+		{6DF5DCFB-47F9-4FA5-A165-7ADF3C89DD63}.Release|x86.Build.0 = Release|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Debug|x64.Build.0 = Debug|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Debug|x86.Build.0 = Debug|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x64.ActiveCfg = Release|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x64.Build.0 = Release|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x86.ActiveCfg = Release|Any CPU
+		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
