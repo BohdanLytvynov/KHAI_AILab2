@@ -13,7 +13,8 @@
   </Target>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ContourSearcher.BLL\ContourSearcher.BLL\ContourSearcher.BLL.vcxproj" />
+    <ProjectReference Include="..\..\ContourSearcher.BLL\CSharpCppInteroperability\CSharpCppInteroperability.csproj" />
+    <ProjectReference Include="..\..\ServiceWrapperLib\ServiceWrapperLib.csproj" />
     <ProjectReference Include="..\MVVMBase\MVVMBase.csproj" />
     <ProjectReference Include="..\UserControls\UserControls.csproj" />
   </ItemGroup>

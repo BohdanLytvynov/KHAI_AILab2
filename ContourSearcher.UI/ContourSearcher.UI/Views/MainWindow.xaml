@@ -1,0 +1,57 @@
+﻿<Window x:Class="ContourSearcher.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ContourSearcher.UI"
+        xmlns:customControls="clr-namespace:UserControls;assembly=UserControls"
+        xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels"
+        mc:Ignorable="d"
+        Title="{Binding Title, UpdateSourceTrigger=PropertyChanged}" 
+        Height="450"
+        Width="800"
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=True}">
+
+    <Grid>
+        <TabControl Style="{StaticResource TabStyle}">
+            <TabItem Header="Load Image">
+                <customControls:ImageViewer Path="{Binding PathToImg, 
+                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </TabItem>
+            <TabItem Header="Image Processing">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="336*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="445*"/>
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter Grid.Column="1" 
+                                  Style="{StaticResource VerticalGridSplitterStyle}"/>
+                    <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="155"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="1" 
+                                        Content="Load to Pipeline"/>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal">
+                                
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Style="{StaticResource MainBorderStyle}">
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Search Contours">
+
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

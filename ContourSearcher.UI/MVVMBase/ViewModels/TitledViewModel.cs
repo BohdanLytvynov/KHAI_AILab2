@@ -26,5 +26,12 @@ namespace MVVMBase.ViewModels
             m_title = string.Empty;
         }
         #endregion
+
+        #region Methods
+        protected void SetTitle(string title)
+        { 
+            m_title = title;    
+        }
+        #endregion
     }
 }

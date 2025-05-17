@@ -8,17 +8,39 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <system:Double x:Key="FontSize">22
+        <system:Double x:Key="FontSize">28
         </system:Double>
+
+        <Style x:Key="FontSizes">
+            <Style.Setters>
+                <Setter Property="ItemsControl.FontSize" Value="{StaticResource FontSize}"/>
+            </Style.Setters>
+        </Style>
+        
+        <Style x:Key="Margins">
+            <Style.Setters>
+                <Setter Property="ItemsControl.Margin" Value="20"/>
+            </Style.Setters>
+        </Style>
+
+
+        <Style x:Key="Borders" BasedOn="{StaticResource Margins}" TargetType="Border">
+            <Style.Setters>
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="3"/>
+                <Setter Property="CornerRadius" Value="10"/>
+            </Style.Setters>
+        </Style>
     </UserControl.Resources>
 
-    <Grid Background="#FFDDDDDD">
+    <Grid x:Name="Container">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="7"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-        <Border BorderBrush="Black" BorderThickness="4" Margin="10">
+        <Border x:Name="ImageBorder"
+                Style="{StaticResource Borders}">
             <Image x:Name="Img" Grid.Row="0"/>
         </Border>
         <Grid Grid.Row="2">
@@ -30,11 +52,11 @@
                 <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Button Content="Open" Grid.Column="1" x:Name="OpenButton"
-                    FontSize="{StaticResource FontSize}"
-                    Margin="5" Click="OpenButton_Click"/>
-            <TextBlock Grid.Column="3" Background="White" x:Name="PathTextBox"
-                       FontSize="{StaticResource FontSize}"
-                       Margin="5" Text="Path will be here..."
+                    Click="OpenButton_Click" Style="{StaticResource FontSizes}"/>
+            <TextBlock Grid.Column="3" Background="White" 
+                       x:Name="PathTextBox"                       
+                       Text="Path will be here..."
+                       Style="{StaticResource FontSizes}"
                        />
         </Grid>
     </Grid>
