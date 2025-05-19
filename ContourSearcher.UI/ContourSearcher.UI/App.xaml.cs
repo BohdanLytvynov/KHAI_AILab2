@@ -34,7 +34,7 @@ namespace ContourSearcher.UI
 
                     view.Closed += (object s, EventArgs e) =>
                     { 
-                        OpenCVWrapper.FreeResources();
+                        OpenCVWrapper.PerformCleanUp();
                     };
                     
 

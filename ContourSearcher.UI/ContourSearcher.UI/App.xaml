@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ContourSearcher.UI" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:enums="clr-namespace:ContourSearcher.UI.Enums"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
         <!--#region Sizes -->
@@ -18,18 +19,24 @@
         <system:Double x:Key="txtBoxInputErrorFontSize">14
         </system:Double>
 
+        <system:Double x:Key="DescLabelsFontsize">18
+        </system:Double>
+
         <Duration x:Key="GridSplitterAnimDuration">0:0:0.02
         </Duration>
         <!--#endregion-->
 
         <!--#region Colors -->
+        <Color x:Key="DescLabelsColor">gray
+        </Color>
+
         <Color x:Key="GridSplitterColor">black
         </Color>
 
         <Color x:Key="GridSplitterSelectColor">blue
         </Color>
 
-        <Color x:Key="BorderColors">
+        <Color x:Key="BorderColorsRectangle">black
         </Color>
         <!--#endregion-->
 
@@ -37,9 +44,29 @@
         <SolidColorBrush x:Key="GridSplitterBrush" 
                          Color="{StaticResource GridSplitterColor}">
         </SolidColorBrush>
+
+        <SolidColorBrush x:Key="DescLabelTextBlockBrush" 
+                         Color="{StaticResource DescLabelsColor}"/>
         <!--#endregion-->
 
         <!--#region Styles -->
+        <Style x:Key="DescLabel" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Foreground" Value="{StaticResource DescLabelTextBlockBrush}"/>
+                <Setter Property="FontSize" Value="{StaticResource DescLabelsFontsize}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="BorderRectStyle" TargetType="Rectangle">
+            <Style.Setters>
+                <Setter Property="Fill" Value="Black"/>
+                <Setter Property="Height" Value="2"/>
+                
+                <Setter Property="Margin" Value="4,5"/>
+            </Style.Setters>
+        </Style>
+
         <Style x:Key="MainBorderStyle" TargetType="Border">
             <Style.Setters>
                 <Setter Property="Margin" Value="10"/>
@@ -86,6 +113,12 @@
                 </Trigger.ExitActions>
             </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HorizontalStack" TargetType="StackPanel">
+            <Style.Setters>
+                <Setter Property="Margin" Value="5"/>
+            </Style.Setters>
         </Style>
 
         <Style x:Key="HorizontalGridSplitterStyle" TargetType="GridSplitter">
@@ -155,5 +188,23 @@
             </Style.Triggers>
         </Style>
         <!--#endregion-->
+
+        <!--#region Enums -->
+        <ObjectDataProvider x:Key="ImageTypeEnum" MethodName="GetValues" 
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="{x:Type enums:ImageToLoadType}"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="SmoothingType" MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="{x:Type enums:SmoothingType}"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <!--#endregion-->
+
     </Application.Resources>
 </Application>

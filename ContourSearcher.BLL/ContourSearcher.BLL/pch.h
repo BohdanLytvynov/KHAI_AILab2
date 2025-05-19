@@ -11,5 +11,8 @@
 #include "framework.h"
 #include <string>
 #include <vector>
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/opencv.hpp"
+#include <fstream>
 
 #endif //PCH_H

@@ -115,13 +115,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Administrator\Projects\C++\AI\Open CV 3.1\opencv31\build\include\opencv2;C:\Users\Administrator\Projects\C++\AI\Open CV 3.1\opencv31\build\include\opencv;C:\Users\Administrator\Projects\C++\AI\Open CV 3.1\opencv31\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\AI\CV\opencv31\build\include\opencv2;E:\AI\CV\opencv31\build\include\opencv;E:\AI\CV\opencv31\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>C:\Users\Administrator\Projects\C++\AI\Open CV 3.1\opencv31\build\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\AI\CV\opencv31\build\x64\vc14\lib;C:\Users\Administrator\Projects\C++\AI\Open CV 3.1\opencv31\build\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

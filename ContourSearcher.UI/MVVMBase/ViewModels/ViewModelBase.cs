@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MVVMBase.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,7 +63,7 @@ namespace MVVMBase.ViewModels
 
         private bool[] m_ValidArray = null;
 
-        #endregion       
+        #endregion
 
         protected void InitValidArray(int count)
         {
@@ -77,6 +79,11 @@ namespace MVVMBase.ViewModels
             }
 
             return true;
+        }
+
+        protected bool ValidateField(int index)
+        { 
+            return m_ValidArray[index];
         }
 
         protected void ResetValidArray()
@@ -110,6 +117,25 @@ namespace MVVMBase.ViewModels
                 throw new ArgumentNullException(nameof(action));
 
             m_Dispatcher?.Invoke(action);
+        }
+
+        protected void InitValidArray(ViewModelBase viewModelBase)
+        {
+            int count = 0;
+
+            var t = viewModelBase.GetType();
+
+            var prop = t.GetProperties();
+
+            foreach (var p in prop)
+            {
+                if (p.GetCustomAttribute<ValidateProperty>() != null)
+                { 
+                    count++;
+                }
+            }
+
+            m_ValidArray = new bool[count];
         }
     }
 }
