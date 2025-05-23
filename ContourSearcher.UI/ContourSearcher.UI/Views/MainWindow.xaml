@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ContourSearcher.UI"
-        xmlns:customControls="clr-namespace:UserControls;assembly=UserControls"
         xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels"
         xmlns:txtBxHelper="clr-namespace:ContourSearcher.UI.Helpers"
         mc:Ignorable="d"
@@ -13,161 +12,28 @@
         Width="800"
         MinHeight="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Height, UpdateSourceTrigger=PropertyChanged}"
         MinWidth="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Width, UpdateSourceTrigger=PropertyChanged}"
-        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=True}"
+        >
 
     <Grid>
-        <TabControl Style="{StaticResource TabStyle}">
-            <TabItem Header="Load Image">
-                <customControls:ImageViewer Path="{Binding PathToImg, 
-                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-            </TabItem>
-            <TabItem Header="Image Processing">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="336*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="445*"/>
-                    </Grid.ColumnDefinitions>
-                    <GridSplitter Grid.Column="1" 
-                                  Style="{StaticResource VerticalGridSplitterStyle}"/>
-                    <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Image Loading:" Style="{StaticResource DescLabel}"/>
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
-                                <Label Content="Enter window name:" Style="{StaticResource InputTxtBoxLabel}"/>
-                                <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                    <TextBox.Text>
-                                        <Binding Path="ImageLoadingWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule/>
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Content="Img. type:" Style="{StaticResource InputTxtBoxLabel}"/>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource ImageTypeEnum}}"
-                                          SelectedItem="{Binding ImageToLoadType, 
-                                    UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                            </StackPanel>
-                            
-                            <Grid Margin="0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="155"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="1" 
-                                        Content="Load to Pipeline"
-                                        Command="{Binding OnAddToImageProcessingPressed}"/>
-                            </Grid>
-
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                            <TextBlock Text="Image Smoothing:" Style="{StaticResource DescLabel}"/>
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-
-                            <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
-                                <Label Content="Enter window name:" Style="{StaticResource InputTxtBoxLabel}"/>
-                                <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                    <TextBox.Text>
-                                        <Binding Path="ImageSmoothingWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule/>
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
-                                <ComboBox ItemsSource="{Binding WindowNames, UpdateSourceTrigger=PropertyChanged}"
-                                          SelectedItem="{Binding ImgSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                          />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Style="{StaticResource InputTxtBoxLabel}" Content="Choose smoothing:"/>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource SmoothingType}}"
-                                          SelectedItem="{Binding SmoothingType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                          />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size1:"/>
-                                <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                    <TextBox.Text>
-                                        <Binding Path="Size1" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule/>
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size2:"/>
-                                <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                    <TextBox.Text>
-                                        <Binding Path="Size2" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule/>
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Style="{StaticResource InputTxtBoxLabel}" Content="Sigma1:"/>
-                                <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                    <TextBox.Text>
-                                        <Binding Path="Sigma1" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule/>
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                                <Label Style="{StaticResource InputTxtBoxLabel}" Content="Sigma2:"/>
-                                <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                                    <TextBox.Text>
-                                        <Binding Path="Sigma2" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                            <Binding.ValidationRules>
-                                                <DataErrorValidationRule/>
-                                            </Binding.ValidationRules>
-                                        </Binding>
-                                    </TextBox.Text>
-                                </TextBox>
-                            </StackPanel>
-
-                            <Grid Margin="0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="155"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="1" 
-            Content="Smooth Image"
-            Command="{Binding OnSmoothImageButtonPressed}"/>
-                            </Grid>
-                            <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Grid.Column="2" Style="{StaticResource MainBorderStyle}">
-                    </Border>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Search Contours">
-
-            </TabItem>
-        </TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <ToggleButton IsChecked="{Binding LoadImageEnabled, UpdateSourceTrigger=PropertyChanged}"
+                Command="{Binding OnLoadImageTabButtonPressed}"
+                Content="Load Image" FontSize="20" Margin="10,0,0,0"/>
+            <ToggleButton IsChecked="{Binding ImageProcessingEnabled, UpdateSourceTrigger=PropertyChanged}" Command="{Binding OnImageProcessTabButton}"
+                Content="Process Image" FontSize="20" Margin="10,0,0,0"/>
+            <ToggleButton Command="{Binding OnSearchContoursTabPressed}"
+                          IsChecked="{Binding ContourSearcherEnabled, 
+                UpdateSourceTrigger=PropertyChanged}"
+                Content="Find Contours" FontSize="20" Margin="10,0,0,0"/>
+        </StackPanel>
+        <Frame x:Name="Main" Grid.Row="1" Margin="0,10,0,0"
+               Content="{Binding Frame, UpdateSourceTrigger=PropertyChanged}"
+               NavigationUIVisibility="Hidden">
+        </Frame>
     </Grid>
 </Window>
