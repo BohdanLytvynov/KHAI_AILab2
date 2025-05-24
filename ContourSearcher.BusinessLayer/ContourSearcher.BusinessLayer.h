@@ -14,6 +14,10 @@ namespace ContourSearcherBusinessLayer {
 		void DisplayImageInWindow(String^ imgName, String^ windowName);
 
 		List<String^>^ CallCleanUp();
+
+		void CloneImage(String^ imgName, String^ newImgName);
+
+		void SmoothImage(String^ imgToSmooth, Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2);
 	};
 
 
@@ -53,6 +57,10 @@ namespace ContourSearcherBusinessLayer {
 		virtual void DisplayImageInWindow(String^ imgName, String^ windowName) override;
 
 		virtual List<String^>^ CallCleanUp();
+
+		virtual void CloneImage(String^ imgName, String^ newImgName) override;
+
+		virtual void SmoothImage(String^ imgToSmooth, Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2) override;
 #pragma endregion
 
 

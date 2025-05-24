@@ -14,6 +14,7 @@
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical" Height="800">
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
                 <TextBlock Text="Image Loading:" Style="{StaticResource DescLabel}"/>
                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                 <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
@@ -70,6 +71,50 @@
             Style="{StaticResource SimpleButton}"/>
                 </Grid>
                 
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="Image Cloning:" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedSourceWindow, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    />
+                    <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsButtonPressed}"
+        ToolTip="Press to update the list of Images that are loaded.">
+                        <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+                Height="20"
+                Width="30"
+                Foreground="#FF6B6B6B">
+                        </fa5:SvgAwesome>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
+                    <Label Content="Enter destination window/image name:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="CloneImageName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" 
+                        Content="Clone Image"
+                        Command="{Binding OnCloneImageButtonPressed}"
+                        Style="{StaticResource SimpleButton}"/>
+                </Grid>
+
                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
             </StackPanel>
         </ScrollViewer>

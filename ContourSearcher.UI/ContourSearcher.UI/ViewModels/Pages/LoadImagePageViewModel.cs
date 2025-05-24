@@ -25,7 +25,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
             set 
             {
                 Set(ref m_pathToImg, value);
-                var list = ShareData.GetItem<List<string>>(Constants.IMAGE_LIST_COLLECTION);
+                var list = ShareData.GetItem<List<string>>(Constants.LOADED_IMAGE_LIST_COLLECTION);
                 list.Add(PathToImg);
             } 
         }
@@ -36,7 +36,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
         public LoadImagePageViewModel()
         {
             m_pathToImg = string.Empty;
-            ShareData.InsertItem(Constants.IMAGE_LIST_COLLECTION, new List<string>());
+            ShareData.InsertItem(Constants.LOADED_IMAGE_LIST_COLLECTION, new List<string>());
         }
         #endregion
 

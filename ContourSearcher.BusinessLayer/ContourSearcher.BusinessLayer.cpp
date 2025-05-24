@@ -125,3 +125,46 @@ List<String^>^ ContourSearcherBusinessLayer::OpenCV::CallCleanUp()
 
 	return result;
 }
+
+void ContourSearcherBusinessLayer::OpenCV::CloneImage(String^ imgName, String^ newImgName)
+{
+	try
+	{
+		std::string imgName_str = MarshalManagedString(imgName);
+		std::string newImgName_str = MarshalManagedString(newImgName);
+
+		auto img = m_ImageStorage->find(imgName_str);
+
+		if (img != m_ImageStorage->end())
+		{
+			auto newImg = cvCloneImage(img->second);
+
+			if (newImg != nullptr)
+			{
+				m_ImageStorage->insert(std::pair<std::string, IplImage*>(newImgName_str, newImg));
+			}
+		}
+	}
+	catch (System::Exception ex())
+	{
+		throw;
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::SmoothImage(String^ imgToSmooth, Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2)
+{
+	std::string imgToSmooth_str = MarshalManagedString(imgToSmooth);
+
+	auto img = m_ImageStorage->find(imgToSmooth_str);
+
+	if (img != m_ImageStorage->end())
+	{
+		auto dest = cvCloneImage(img->second);
+
+		cvSmooth(img->second, dest, smoothType, size1, size2, sigma1, sigma2);
+
+		cvShowImage(img->first.c_str(), img->second);
+
+		cvWaitKey(0);
+	}
+}

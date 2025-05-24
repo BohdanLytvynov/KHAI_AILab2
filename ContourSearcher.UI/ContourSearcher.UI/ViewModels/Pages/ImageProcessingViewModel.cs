@@ -1,5 +1,8 @@
 ﻿using ContourSearcher.UI.Constant;
+using ContourSearcher.UI.DataExchange;
 using ContourSearcher.UI.Enums;
+using ContourSearcher.UI.Helpers;
+using ContourSearcherBusinessLayer;
 using CSharpBusinessLayer.Validators;
 using MVVMBase.Attributes;
 using MVVMBase.Commands;
@@ -18,8 +21,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
     {
         #region Fields
 
-        private string m_ImageSmoothingWindowName;
-        private bool m_useExistingWindow;
+        private string m_ImageSmoothingWindowName;        
         private bool m_useDynamicMode;
         private string m_SourceWindow;
 
@@ -31,19 +33,18 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         private string m_sigma1;
         private string m_sigma2;
+
+        private ICVSystem m_CVSystem;
         #endregion
 
         #region Properties
 
-        public ObservableCollection<string> WindowNames
+        public ObservableCollection<string> ActiveWindows
         { get => m_WindowNames; set => m_WindowNames = value; }
 
         [ValidateProperty]
         public string ImageSmoothingWindowName
         { get => m_ImageSmoothingWindowName; set => Set(ref m_ImageSmoothingWindowName, value); }
-
-        public bool UseExistingWindow
-        { get => m_useExistingWindow; set => Set(ref m_useExistingWindow, value); }
 
         public bool UseDynamicMode 
         { get=>m_useDynamicMode; set=>Set(ref m_useDynamicMode, value); }
@@ -77,20 +78,17 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
                 switch (columnName)
                 {
-                    case nameof(ImageSmoothingWindowName):
-                        SetValidArrayValue(0, ValidationHelper.ValidateEmptyText(ImageSmoothingWindowName, out error));
-                        break;
                     case nameof(Size1):
-                        SetValidArrayValue(1, ValidationHelper.ValidateNumber(Size1, out error, Constants.DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(0, ValidationHelper.ValidateNumber(Size1, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                     case nameof(Size2):
-                        SetValidArrayValue(2, ValidationHelper.ValidateNumber(Size2, out error, Constants.DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(1, ValidationHelper.ValidateNumber(Size2, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                     case nameof(Sigma1):
-                        SetValidArrayValue(3, ValidationHelper.ValidateNumber(Sigma1, out error, Constants.DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(2, ValidationHelper.ValidateNumber(Sigma1, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                     case nameof(Sigma2):
-                        SetValidArrayValue(4, ValidationHelper.ValidateNumber(Sigma2, out error, Constants.DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(3, ValidationHelper.ValidateNumber(Sigma2, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                 }
 
@@ -103,9 +101,16 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         public ICommand OnSmoothImageButtonPressed { get; }
 
+        public ICommand OnRefreshActiveWindowsPressed { get; }
+
         #endregion
 
         #region Ctor
+        public ImageProcessingViewModel(ICVSystem cVSystem) : this()
+        {
+            m_CVSystem = cVSystem;
+        }
+
         public ImageProcessingViewModel()
         {
             InitValidArray(this);
@@ -114,7 +119,6 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
             m_WindowNames = new ObservableCollection<string>();
             m_SourceWindow = Constants.DEFAULT_INPUT_VALUE;
-            m_useExistingWindow = false;
             m_useDynamicMode = false;
             m_SmoothingType = SmoothingType.CV_BLUR_NO_SCALE;
             m_size1 = Constants.DEFAULT_INPUT_VALUE;
@@ -126,26 +130,42 @@ namespace ContourSearcher.UI.ViewModels.Pages
                 OnSmoothButtonPressedExecute,
                 CanOnSmoothButtonPressedExecute
                 );
+
+            OnRefreshActiveWindowsPressed = new Command(
+                OnRefreshActiveButtonPressedExecute,
+                CanOnRefreshActiveWindowsButtonPressedExecute
+                );
         }
         #endregion
 
         #region Methods
 
-        #region Smoothing
+        private void SmoothImage()
+        {
+            
+        }
+
+        #region On Smooth Button Pressed Execute
 
         private bool CanOnSmoothButtonPressedExecute(object p) =>
-            ValidateFields(0, 5);
+            ValidateFields(0, 3);
 
         private void OnSmoothButtonPressedExecute(object p)
         {
-            //WindowNames.Add(ImageSmoothingWindowName);
-            //OpenCVWrapper.SmoothImage(ImgSource, ImageSmoothingWindowName, (int)SmoothingType,
-            //    int.Parse(Size1),
-            //    int.Parse(Size2),
-            //    double.Parse(Sigma1)
-            //    , double.Parse(Sigma2));
+            SmoothImage();
+        }
 
-            //OpenCVWrapper.DisplayImageInWindow(ImageSmoothingWindowName, ImageSmoothingWindowName);
+        #endregion
+
+        #region On Refresh Active Windows Pressed
+
+        private bool CanOnRefreshActiveWindowsButtonPressedExecute(object p) => true;
+
+        private void OnRefreshActiveButtonPressedExecute(object p)
+        {
+            var imgs = ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION);
+
+            UIHelper.RefreshObservableCollection(ActiveWindows, imgs);
         }
 
         #endregion

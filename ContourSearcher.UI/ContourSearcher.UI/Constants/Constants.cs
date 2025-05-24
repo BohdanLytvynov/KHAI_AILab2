@@ -12,7 +12,7 @@ namespace ContourSearcher.UI.Constant
         public const string SMOOTHED_IMAGE_NAME = "Smoothed Image";
         public const string DEFAULT_INPUT_VALUE = "Enter value";
         //Don't touch this section!
-        public const string IMAGE_LIST_COLLECTION = "LoadedImages";
+        public const string LOADED_IMAGE_LIST_COLLECTION = "LoadedImages";
         public const string ACTIVE_WINDOW_LIST_COLLECTION = "ActiveWindows";
         public const string IMAGES_LOADED_TO_PIPELINE = "ImagesInPipeline";
     }

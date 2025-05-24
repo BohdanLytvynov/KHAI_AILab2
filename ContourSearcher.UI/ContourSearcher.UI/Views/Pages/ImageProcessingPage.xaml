@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages"
       xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance vm:ImageProcessingViewModel, IsDesignTimeCreatable=True}"
@@ -17,44 +18,22 @@
         <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
                 <StackPanel Orientation="Vertical" Height="700">
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
                     <TextBlock Text="Image Smoothing:" Style="{StaticResource DescLabel}"/>
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
-                    <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
-                        <Label Content="Enter new window name:" Style="{StaticResource InputTxtBoxLabel}"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                            <TextBox.Text>
-                                <Binding Path="ImageSmoothingWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                    </StackPanel>
-
-                    <CheckBox Margin="10,0,0,0"
-                                Content="Use existing Window" 
-                                VerticalContentAlignment="Center"
-                                FontSize="20"
-                                      IsChecked="{Binding UseExistingWindow, 
-                                UpdateSourceTrigger=PropertyChanged, 
-                                Mode=TwoWay}"/>
-
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
-                        <ComboBox ItemsSource="{Binding WindowNames, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedItem="{Binding ImgSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                      />
+                        <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding ImgSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        <Button Margin="20,0,0,0" Command="{Binding OnRefreshButtonPressed}"
+                                ToolTip="Press to update the list of Images that are loaded.">
+                            <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+                                Height="20"
+                                Width="30"
+                                Foreground="#FF6B6B6B"/>
+                        </Button>
                     </StackPanel>
-
-                    <CheckBox Margin="10,0,0,0"
-        Content="Use dynamic update mode" 
-VerticalContentAlignment="Center"
-FontSize="20"
-      IsChecked="{Binding UseExistsingWindowT2, 
-UpdateSourceTrigger=PropertyChanged, 
-Mode=TwoWay}"/>
 
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Choose smoothing:"/>
@@ -63,56 +42,45 @@ Mode=TwoWay}"/>
                                       />
                     </StackPanel>
 
+                    <CheckBox Margin="10,0,0,0"
+                        Content="Use dynamic update mode" 
+                        VerticalContentAlignment="Center"
+                        FontSize="20"
+                        IsChecked="{Binding UseDynamicMode, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Mode=TwoWay}"/>
+
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size1:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                            <TextBox.Text>
-                                <Binding Path="Size1" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
+                                 Text="{Binding ElementName=Size1Slider, 
+                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
+                        <Slider x:Name="Size1Slider"
+                                Style="{StaticResource SliderStyle}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size2:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                            <TextBox.Text>
-                                <Binding Path="Size2" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
+                                 Text="{Binding ElementName=Size2Slider, UpdateSourceTrigger=PropertyChanged, 
+                            Mode=TwoWay,Path=Value, StringFormat={}{0:#.##}}"/>
+                        <Slider x:Name="Size2Slider" Style="{StaticResource SliderStyle}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Sigma1:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                            <TextBox.Text>
-                                <Binding Path="Sigma1" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
+                                 Text="{Binding ElementName=Sigma1Slider, 
+                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
+                        <Slider x:Name="Sigma1Slider" Style="{StaticResource SliderStyle}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Sigma2:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                            <TextBox.Text>
-                                <Binding Path="Sigma2" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
+                                 Text="{Binding ElementName=Sigma2Slider, 
+                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
+                        <Slider x:Name="Sigma2Slider" Style="{StaticResource SliderStyle}"/>
                     </StackPanel>
 
                     <Grid Margin="0,5">

@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVMBase", "..\MVVMBase\MVV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserControls", "..\UserControls\UserControls.csproj", "{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpCppInteroperability", "..\..\ContourSearcher.BLL\CSharpCppInteroperability\CSharpCppInteroperability.csproj", "{ACE79489-E0D1-4BD8-8A93-EA789556D97A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceWrapperLib", "..\..\ServiceWrapperLib\ServiceWrapperLib.csproj", "{9600FCF7-F9FD-49DF-B76E-AC2DA0C11B87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpBusinessLayer", "..\..\ContourSearcher.BLL\CSharpBusinessLayer\CSharpBusinessLayer.csproj", "{6C264AAF-4057-4D58-9144-9C71896776F6}"
@@ -77,18 +75,6 @@ Global
 		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x64.Build.0 = Release|Any CPU
 		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F12EF6FC-68F7-4DBB-BBD1-B6A066BAD18F}.Release|x86.Build.0 = Release|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Debug|x64.Build.0 = Debug|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Debug|x86.Build.0 = Debug|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Release|x64.ActiveCfg = Release|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Release|x64.Build.0 = Release|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Release|x86.ActiveCfg = Release|Any CPU
-		{ACE79489-E0D1-4BD8-8A93-EA789556D97A}.Release|x86.Build.0 = Release|Any CPU
 		{9600FCF7-F9FD-49DF-B76E-AC2DA0C11B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9600FCF7-F9FD-49DF-B76E-AC2DA0C11B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9600FCF7-F9FD-49DF-B76E-AC2DA0C11B87}.Debug|x64.ActiveCfg = Debug|Any CPU
