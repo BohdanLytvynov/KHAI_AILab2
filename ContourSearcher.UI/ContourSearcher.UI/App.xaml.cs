@@ -1,16 +1,14 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using ContourSearcher.UI.PageManagers;
 using ContourSearcher.UI.PageManagers.Interfaces;
 using ContourSearcher.UI.ViewModels;
 using ContourSearcher.UI.ViewModels.Pages;
 using ContourSearcher.UI.Views.Pages;
-using CSharpCppInteroperability.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using MVVMBase.ViewModels;
 using ServiceWrapperLib;
+using ContourSearcherBusinessLayer;
 
 namespace ContourSearcher.UI
 {
@@ -27,6 +25,7 @@ namespace ContourSearcher.UI
 
             ServiceWrapper.ConfigureServices(c =>
             {
+                c.AddSingleton<ICVSystem, OpenCV>();
 
                 c.AddSingleton<IPageManager, PageManager>();
 
@@ -35,6 +34,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<LoadImagePageViewModel>();
                 c.AddSingleton<ImageProcessingViewModel>();
                 c.AddSingleton<ContourSearcherViewModel>();
+                c.AddSingleton<ConfigurationViewModel>();
 
                 //Add Views
                 c.AddTransient(p =>
@@ -47,8 +47,10 @@ namespace ContourSearcher.UI
                     vm.Dispatcher = view.Dispatcher;
 
                     view.Closed += (object s, EventArgs e) =>
-                    { 
-                        OpenCVWrapper.PerformCleanUp();
+                    {
+                        var cv = p.GetRequiredService<ICVSystem>();
+
+                        (cv as IDisposable)!.Dispose();
                     };
                     
                     return view;
@@ -59,6 +61,8 @@ namespace ContourSearcher.UI
                 c.AddSingleton<ImageProcessingPage>();
 
                 c.AddSingleton<ContourSearcherPage>();
+
+                c.AddSingleton<ConfigurationPage>();
             });
 
             var provider = ServiceWrapper.ServiceProvider;
@@ -69,10 +73,11 @@ namespace ContourSearcher.UI
             ConfigureVM(typeof(LoadImagePage), typeof(LoadImagePageViewModel), pm, provider);
             ConfigureVM(typeof(ImageProcessingPage), typeof(ImageProcessingViewModel), pm, provider);
             ConfigureVM(typeof(ContourSearcherPage), typeof(ContourSearcherViewModel), pm, provider);
-
+            ConfigureVM(typeof(ConfigurationPage), typeof(ConfigurationViewModel), pm, provider);
 
             mainWindow.Show();
             pm.Switch(nameof(LoadImagePage));
+            pm.Switch(nameof(ConfigurationPage), Frames.Right);
         }
 
         private void ConfigureVM(Type view, Type viewModel, 

@@ -1,15 +1,9 @@
-﻿using ContourSearcher.UI.Enums;
-using ContourSearcher.UI.PageManagers;
+﻿using ContourSearcher.UI.PageManagers;
 using ContourSearcher.UI.PageManagers.Interfaces;
 using ContourSearcher.UI.Views.Pages;
 using CSharpBusinessLayer.Helpers;
-using CSharpBusinessLayer.Validators;
-using CSharpCppInteroperability.Wrappers;
-using MVVMBase.Attributes;
 using MVVMBase.Commands;
 using MVVMBase.ViewModels;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 
@@ -18,8 +12,8 @@ namespace ContourSearcher.UI.ViewModels
     internal class MainWindowViewModel : TitledViewModel
     {
         #region Fields
-        Dictionary<string, string> m_PathToTemp;
-        private bool m_ImagesSync;
+        //Dictionary<string, string> m_PathToTemp;
+        //private bool m_ImagesSync;
 
         private Task m_CleanImagesTask;
 
@@ -33,6 +27,8 @@ namespace ContourSearcher.UI.ViewModels
 
         private object m_Frame;
 
+        private object m_rightFrame;
+
         //Temp paths
         private const string CLEAN_IMAGE_TEMP = "CleanImagesTempPath";
 
@@ -42,6 +38,9 @@ namespace ContourSearcher.UI.ViewModels
 
         public object Frame 
         { get=>m_Frame; set=>Set(ref m_Frame, value); }
+
+        public object RightFrame 
+        { get=>m_rightFrame; set=>Set(ref m_rightFrame, value); }
 
         public bool LoadImageEnabled 
         { get=>m_LoadImageEnabled; set=>Set(ref m_LoadImageEnabled, value); }
@@ -82,14 +81,15 @@ namespace ContourSearcher.UI.ViewModels
             m_ImageProcessingEnabled = false;
             m_ContourSearchEnabled = false;
             m_Frame = new object();
-            m_PathToTemp = new Dictionary<string, string>();
-            m_ImagesSync = false;
-            var pathToCurrent = Environment.CurrentDirectory;
-            var pathToTempFolder = pathToCurrent + Path.DirectorySeparatorChar + "Temp";
+            m_rightFrame = new object();
+            //m_PathToTemp = new Dictionary<string, string>();
+            //m_ImagesSync = false;
+            //var pathToCurrent = Environment.CurrentDirectory;
+            //var pathToTempFolder = pathToCurrent + Path.DirectorySeparatorChar + "Temp";
 
-            IOHelper.CreateDirectoryIfNotExists(pathToTempFolder);
+            //IOHelper.CreateDirectoryIfNotExists(pathToTempFolder);
 
-            AddToTempFilePath(CLEAN_IMAGE_TEMP, pathToTempFolder + Path.DirectorySeparatorChar + "ImageClean.txt");
+            //AddToTempFilePath(CLEAN_IMAGE_TEMP, pathToTempFolder + Path.DirectorySeparatorChar + "ImageClean.txt");
 
             
             //Set up Timer
@@ -128,28 +128,28 @@ namespace ContourSearcher.UI.ViewModels
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            if (!m_ImagesSync)
+            if (true)
             {
-                m_ImagesSync = true;
+                //m_ImagesSync = true;
 
-                OpenCVWrapper.CallImagesCleanUp(m_PathToTemp[CLEAN_IMAGE_TEMP]);
+                //OpenCVWrapper.CallImagesCleanUp(m_PathToTemp[CLEAN_IMAGE_TEMP]);
 
-                var imgs = IOHelper.ReadFromFile(m_PathToTemp[CLEAN_IMAGE_TEMP]);
+                //var imgs = IOHelper.ReadFromFile(m_PathToTemp[CLEAN_IMAGE_TEMP]);
 
-                if (!string.IsNullOrEmpty(imgs))
-                { 
-                    var arr = imgs.Split(',');
+                //if (!string.IsNullOrEmpty(imgs))
+                //{ 
+                //    var arr = imgs.Split(',');
 
-                    foreach (var image in arr)
-                    {
-                        QueueJobToDispatcher(() =>
-                        { 
-                            //WindowNames.Remove(image);
-                        });
-                    }
-                }
+                //    foreach (var image in arr)
+                //    {
+                //        QueueJobToDispatcher(() =>
+                //        { 
+                //            //WindowNames.Remove(image);
+                //        });
+                //    }
+                //}
                 
-                m_ImagesSync = false;
+                //m_ImagesSync = false;
             }
         }
         #endregion
@@ -158,12 +158,20 @@ namespace ContourSearcher.UI.ViewModels
 
         private void OnSwitchPage(object src, PageManagerEventArgs e)
         {
-            Frame = e.Page;
+            switch (e.Frame)
+            {
+                case Frames.Main:
+                    Frame = e.Page;
+                    break;
+                case Frames.Right:
+                    RightFrame = e.Page;
+                    break;
+            }
         }
 
         private void AddToTempFilePath(string key, string path)
         {
-            m_PathToTemp.Add(key, path);
+            //m_PathToTemp.Add(key, path);
 
             IOHelper.CreateFileIfNotExists(path);
             IOHelper.WriteToFile("", path);//Clear the temp file to be able to use it after restart

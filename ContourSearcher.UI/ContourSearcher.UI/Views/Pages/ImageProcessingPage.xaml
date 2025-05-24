@@ -8,51 +8,15 @@
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance vm:ImageProcessingViewModel, IsDesignTimeCreatable=True}"
-      Background="White">
-    <Grid x:Name="ImgProcGrid">
+      Background="White" x:Name="ImgProcGrid">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel Orientation="Vertical" Height="{Binding ElementName=ImgProcGrid, 
-                            UpdateSourceTrigger=PropertyChanged, Path=ActualHeight}"
-                                CanVerticallyScroll="True"
-                                >
-                    <TextBlock Text="Image Loading:" Style="{StaticResource DescLabel}"/>
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                    <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
-                        <Label Content="Enter window name:" Style="{StaticResource InputTxtBoxLabel}"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}">
-                            <TextBox.Text>
-                                <Binding Path="ImageLoadingWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                        <Label Content="Img. type:" Style="{StaticResource InputTxtBoxLabel}"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource ImageTypeEnum}}"
-                                      SelectedItem="{Binding ImageToLoadType, 
-                                UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    </StackPanel>
-
-                    <Grid Margin="0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="155"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="1" 
-                                    Content="Load to Pipeline"
-                                    Command="{Binding OnAddToImageProcessingPressed}"/>
-                    </Grid>
-
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <StackPanel Orientation="Vertical" Height="700">
                     <TextBlock Text="Image Smoothing:" Style="{StaticResource DescLabel}"/>
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
@@ -73,7 +37,7 @@
                                 Content="Use existing Window" 
                                 VerticalContentAlignment="Center"
                                 FontSize="20"
-                                      IsChecked="{Binding UseExistsingWindowT2, 
+                                      IsChecked="{Binding UseExistingWindow, 
                                 UpdateSourceTrigger=PropertyChanged, 
                                 Mode=TwoWay}"/>
 
@@ -159,7 +123,8 @@ Mode=TwoWay}"/>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="1" 
         Content="Smooth Image"
-        Command="{Binding OnSmoothImageButtonPressed}"/>
+        Command="{Binding OnSmoothImageButtonPressed}"
+                                Style="{StaticResource SimpleButton}"/>
                     </Grid>
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
                 </StackPanel>

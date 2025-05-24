@@ -13,8 +13,11 @@
   </Target>
 
   <ItemGroup>
+    <PackageReference Include="FontAwesome5" Version="2.1.11" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\ContourSearcher.BLL\CSharpBusinessLayer\CSharpBusinessLayer.csproj" />
-    <ProjectReference Include="..\..\ContourSearcher.BLL\CSharpCppInteroperability\CSharpCppInteroperability.csproj" />
     <ProjectReference Include="..\..\ContourSearcher.BusinessLayer\ContourSearcher.BusinessLayer.vcxproj" />
     <ProjectReference Include="..\..\ServiceWrapperLib\ServiceWrapperLib.csproj" />
     <ProjectReference Include="..\MVVMBase\MVVMBase.csproj" />

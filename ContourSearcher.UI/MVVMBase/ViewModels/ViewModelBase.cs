@@ -55,6 +55,30 @@ namespace MVVMBase.ViewModels
             }
         }
 
+        public virtual bool SetToDefaultIfNull<T>(ref T field, T value, T defValue, [CallerMemberName] string propName = "")
+        {
+            if (field == null)
+            {
+                field = defValue;
+            }
+
+            if (value == null)
+            {
+                value = defValue;
+            }
+
+            if (value.Equals(field))
+            {
+                return false;
+            }
+            else
+            {
+                field = value;
+                OnPropertyChanged(propName);
+                return true;
+            }
+        }
+
         #region IDataErrorInfo
 
         public virtual string Error => throw new NotImplementedException();

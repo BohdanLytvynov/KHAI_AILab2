@@ -1,4 +1,5 @@
-﻿using ContourSearcher.UI.Enums;
+﻿using ContourSearcher.UI.Constant;
+using ContourSearcher.UI.Enums;
 using CSharpBusinessLayer.Validators;
 using MVVMBase.Attributes;
 using MVVMBase.Commands;
@@ -16,16 +17,12 @@ namespace ContourSearcher.UI.ViewModels.Pages
     internal class ImageProcessingViewModel : ViewModelBase
     {
         #region Fields
-        private const string ORIGINAL_IMAGE_NAME = "Original";
-        private const string SMOOTHED_IMAGE_NAME = "Smoothed Image";
-        private const string DEFAULT_INPUT_VALUE = "Enter value";
 
-        private string m_ImageLoadingWindowName;
         private string m_ImageSmoothingWindowName;
-        private bool m_useExistingWindowT2;
+        private bool m_useExistingWindow;
+        private bool m_useDynamicMode;
         private string m_SourceWindow;
 
-        private ImageToLoadType m_imageToLoadType;
         private ObservableCollection<string> m_WindowNames;
         private SmoothingType m_SmoothingType;
 
@@ -38,22 +35,18 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         #region Properties
 
-        public ImageToLoadType ImageToLoadType
-        { get => m_imageToLoadType; set => Set(ref m_imageToLoadType, value); }
-
         public ObservableCollection<string> WindowNames
         { get => m_WindowNames; set => m_WindowNames = value; }
-
-        [ValidateProperty]
-        public string ImageLoadingWindowName
-        { get => m_ImageLoadingWindowName; set => Set(ref m_ImageLoadingWindowName, value); }
 
         [ValidateProperty]
         public string ImageSmoothingWindowName
         { get => m_ImageSmoothingWindowName; set => Set(ref m_ImageSmoothingWindowName, value); }
 
-        public bool UseExistsingWindowT2
-        { get => m_useExistingWindowT2; set => Set(ref m_useExistingWindowT2, value); }
+        public bool UseExistingWindow
+        { get => m_useExistingWindow; set => Set(ref m_useExistingWindow, value); }
+
+        public bool UseDynamicMode 
+        { get=>m_useDynamicMode; set=>Set(ref m_useDynamicMode, value); }
 
         public string ImgSource
         { get => m_SourceWindow; set => Set(ref m_SourceWindow, value); }
@@ -84,23 +77,20 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
                 switch (columnName)
                 {
-                    case nameof(ImageLoadingWindowName):
-                        SetValidArrayValue(0, ValidationHelper.ValidateEmptyText(ImageLoadingWindowName, out error));
-                        break;
                     case nameof(ImageSmoothingWindowName):
-                        SetValidArrayValue(1, ValidationHelper.ValidateEmptyText(ImageSmoothingWindowName, out error));
+                        SetValidArrayValue(0, ValidationHelper.ValidateEmptyText(ImageSmoothingWindowName, out error));
                         break;
                     case nameof(Size1):
-                        SetValidArrayValue(2, ValidationHelper.ValidateNumber(Size1, out error, DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(1, ValidationHelper.ValidateNumber(Size1, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                     case nameof(Size2):
-                        SetValidArrayValue(3, ValidationHelper.ValidateNumber(Size2, out error, DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(2, ValidationHelper.ValidateNumber(Size2, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                     case nameof(Sigma1):
-                        SetValidArrayValue(4, ValidationHelper.ValidateNumber(Sigma1, out error, DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(3, ValidationHelper.ValidateNumber(Sigma1, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                     case nameof(Sigma2):
-                        SetValidArrayValue(5, ValidationHelper.ValidateNumber(Sigma2, out error, DEFAULT_INPUT_VALUE));
+                        SetValidArrayValue(4, ValidationHelper.ValidateNumber(Sigma2, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
                 }
 
@@ -111,8 +101,6 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         #region Commands
 
-        public ICommand OnAddToImageProcessingPressed { get; }
-
         public ICommand OnSmoothImageButtonPressed { get; }
 
         #endregion
@@ -122,23 +110,17 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             InitValidArray(this);
 
-            m_imageToLoadType = ImageToLoadType.CV_LOAD_IMAGE_COLOR;
-            m_ImageLoadingWindowName = ORIGINAL_IMAGE_NAME;
-            m_ImageSmoothingWindowName = SMOOTHED_IMAGE_NAME;
+            m_ImageSmoothingWindowName = Constants.SMOOTHED_IMAGE_NAME;
 
             m_WindowNames = new ObservableCollection<string>();
-            m_SourceWindow = DEFAULT_INPUT_VALUE;
-            m_useExistingWindowT2 = false;
+            m_SourceWindow = Constants.DEFAULT_INPUT_VALUE;
+            m_useExistingWindow = false;
+            m_useDynamicMode = false;
             m_SmoothingType = SmoothingType.CV_BLUR_NO_SCALE;
-            m_size1 = DEFAULT_INPUT_VALUE;
-            m_size2 = DEFAULT_INPUT_VALUE;
-            m_sigma1 = DEFAULT_INPUT_VALUE;
-            m_sigma2 = DEFAULT_INPUT_VALUE;
-
-            OnAddToImageProcessingPressed = new Command(
-                OnAddToImageProcessingExecute,
-                CanOnAddToImageProcessingExecute
-                );
+            m_size1 = Constants.DEFAULT_INPUT_VALUE;
+            m_size2 = Constants.DEFAULT_INPUT_VALUE;
+            m_sigma1 = Constants.DEFAULT_INPUT_VALUE;
+            m_sigma2 = Constants.DEFAULT_INPUT_VALUE;
 
             OnSmoothImageButtonPressed = new Command(
                 OnSmoothButtonPressedExecute,
@@ -148,19 +130,6 @@ namespace ContourSearcher.UI.ViewModels.Pages
         #endregion
 
         #region Methods
-
-        #region Image Processing
-        private bool CanOnAddToImageProcessingExecute(object p) =>
-            ValidateField(0);
-
-        private void OnAddToImageProcessingExecute(object p)
-        {
-            WindowNames.Add(ImageLoadingWindowName);
-            //m_CleanImagesTask.Start();
-            //OpenCVWrapper.LoadImageToOpenCV(PathToImg, ImageLoadingWindowName, (int)m_imageToLoadType);
-            //OpenCVWrapper.DisplayImageInWindow(ImageLoadingWindowName, ImageLoadingWindowName);
-        }
-        #endregion
 
         #region Smoothing
 

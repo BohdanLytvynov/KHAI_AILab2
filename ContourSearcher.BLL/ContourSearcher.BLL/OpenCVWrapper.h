@@ -12,7 +12,7 @@ OPENCV_API void LoadImageToOpenCV(const char* path, const char*, int color);
 
 OPENCV_API void DisplayImageInWindow(const char* imgName, const char* windowName);
 
-OPENCV_API void PerformCleanUp();
+OPENCV_API void CallCleanUp();
 
 OPENCV_API void FreeImage(const char* imgName);
 

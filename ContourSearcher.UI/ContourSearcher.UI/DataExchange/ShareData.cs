@@ -20,7 +20,10 @@ namespace ContourSearcher.UI.DataExchange
 
         public static T GetItem<T>(string key)
         { 
-            return m_Storage[key];
+            if(m_Storage.ContainsKey(key))
+                return m_Storage[key];
+
+            return default;
         }
 
         public static void RemoveItem(string key)

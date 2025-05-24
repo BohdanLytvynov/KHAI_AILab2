@@ -1,4 +1,5 @@
-﻿using ContourSearcher.UI.DataExchange;
+﻿using ContourSearcher.UI.Constant;
+using ContourSearcher.UI.DataExchange;
 using MVVMBase.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,27 +18,29 @@ namespace ContourSearcher.UI.ViewModels.Pages
         #endregion
 
         #region Properties
+
         public string PathToImg
         { 
             get => m_pathToImg; 
             set 
             {
                 Set(ref m_pathToImg, value);
-                ShareData.InsertItem(nameof(PathToImg), PathToImg);
+                var list = ShareData.GetItem<List<string>>(Constants.IMAGE_LIST_COLLECTION);
+                list.Add(PathToImg);
             } 
         }
+
         #endregion
 
         #region Ctor
         public LoadImagePageViewModel()
         {
             m_pathToImg = string.Empty;
+            ShareData.InsertItem(Constants.IMAGE_LIST_COLLECTION, new List<string>());
         }
         #endregion
 
         #region Methods
-
-
 
         #endregion
     }

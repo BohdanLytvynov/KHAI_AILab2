@@ -13,4 +13,6 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/opencv.hpp"
 #include <map>
+#include <msclr/marshal.h> 
+#include <msclr/marshal_cppstd.h>
 #endif //PCH_H

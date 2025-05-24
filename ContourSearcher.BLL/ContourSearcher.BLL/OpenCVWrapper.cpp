@@ -78,7 +78,7 @@ void SmoothImage(const char* srcImgName, const char* dstImgName,
 //	cvReleaseMemStorage(&storage);	
 //}
 
-void PerformCleanUp()
+void CallCleanUp()
 {
 	for (auto r : m_ImageStorage)
 	{

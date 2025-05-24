@@ -8,13 +8,21 @@ using System.Windows.Controls;
 
 namespace ContourSearcher.UI.PageManagers
 {
+    internal enum Frames
+    { 
+        Main, Right
+    }
+
     internal class PageManagerEventArgs : EventArgs
     {
         public Page Page { get; }
 
-        public PageManagerEventArgs(Page page)
+        public Frames Frame { get; }
+
+        public PageManagerEventArgs(Page page, Frames frame)
         {
             Page = page;
+            Frame = frame;
         }
     }
 
@@ -68,13 +76,13 @@ namespace ContourSearcher.UI.PageManagers
             m_pages.Remove(name);
         }
 
-        public void Switch(string name)
+        public void Switch(string name, Frames frame)
         {
             Page page = null;
 
             if (m_pages.TryGetValue(name, out page))
             {
-                m_OnPageChanged?.Invoke(this, new PageManagerEventArgs(page));
+                m_OnPageChanged?.Invoke(this, new PageManagerEventArgs(page, frame));
             }            
         }
 

@@ -118,6 +118,7 @@
         <Style x:Key="HorizontalStack" TargetType="StackPanel">
             <Style.Setters>
                 <Setter Property="Margin" Value="5"/>
+                <Setter Property="ItemsControl.FontSize" Value="18"/>
             </Style.Setters>
         </Style>
 
@@ -187,9 +188,19 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
-        
-        
+
+        <Style x:Key="SimpleButton" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="20"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="SimpleTogleButton" TargetType="ToggleButton">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="20"/>
+            </Style.Setters>
+        </Style>
+
         <!--#endregion-->
 
         <!--#region Enums -->

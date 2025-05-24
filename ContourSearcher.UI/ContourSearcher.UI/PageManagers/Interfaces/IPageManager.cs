@@ -15,6 +15,6 @@ namespace ContourSearcher.UI.PageManagers.Interfaces
 
         void UnregisterPage(string name);
 
-        void Switch(string name);
+        void Switch(string name, Frames frame = Frames.Main);
     }
 }
