@@ -10,7 +10,7 @@ namespace ContourSearcher.UI.Constant
     {
         public const string ORIGINAL_IMAGE_NAME = "Original";
         public const string SMOOTHED_IMAGE_NAME = "Smoothed Image";
-        public const string DEFAULT_INPUT_VALUE = "Enter value";
+        public const string DEFAULT_INPUT_VALUE = "enter smth";
         //Don't touch this section!
         public const string LOADED_IMAGE_LIST_COLLECTION = "LoadedImages";
         public const string ACTIVE_WINDOW_LIST_COLLECTION = "ActiveWindows";

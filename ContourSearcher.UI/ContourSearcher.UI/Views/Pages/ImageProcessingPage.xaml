@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages"
       xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages"
       xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      xmlns:custControls="clr-namespace:ContourSearcher.UI.CustomUserControls"
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance vm:ImageProcessingViewModel, IsDesignTimeCreatable=True}"
@@ -25,8 +26,8 @@
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
                         <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedItem="{Binding ImgSource, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                        <Button Margin="20,0,0,0" Command="{Binding OnRefreshButtonPressed}"
+                                  SelectedItem="{Binding ImgSourceForSmooth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsPressed}"
                                 ToolTip="Press to update the list of Images that are loaded.">
                             <fa5:SvgAwesome Icon="Solid_RedoAlt" 
                                 Height="20"
@@ -43,21 +44,28 @@
                     </StackPanel>
 
                     <CheckBox Margin="10,0,0,0"
-                        Content="Use dynamic update mode" 
+                        Content="Use dynamic update mode"
                         VerticalContentAlignment="Center"
                         FontSize="20"
-                        IsChecked="{Binding UseDynamicMode, 
-                        UpdateSourceTrigger=PropertyChanged, 
+                        IsChecked="{Binding UseDynamicMode,
+                        UpdateSourceTrigger=PropertyChanged,
                         Mode=TwoWay}"/>
 
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                    <custControls:Slider LabelText="Size1:" Deliminator="," ErrorStyle="{StaticResource SliderErrorStyle}"
+                                         LabelStyle="{StaticResource InputTxtBoxLabel}"
+                                         Margin="20" Value="{Binding Size1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                         SliderStyle="{StaticResource SliderIntStyle}"
+                                         IntegerPartTextBoxStyle="{StaticResource SliderTxtBoxes}"
+                                         FloatPartTextBoxStyleProperty="{StaticResource SliderTxtBoxes}"/>
+
+                    <!--<StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size1:"/>
                         <TextBox Style="{StaticResource TxtBoxInputStyle}"
                                  Text="{Binding ElementName=Size1Slider, 
                             UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
                         <Slider x:Name="Size1Slider"
                                 Style="{StaticResource SliderStyle}"/>
-                    </StackPanel>
+                    </StackPanel>-->
 
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size2:"/>

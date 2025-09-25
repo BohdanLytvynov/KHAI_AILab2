@@ -7,12 +7,7 @@ using CSharpBusinessLayer.Validators;
 using MVVMBase.Attributes;
 using MVVMBase.Commands;
 using MVVMBase.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ContourSearcher.UI.ViewModels.Pages
@@ -21,14 +16,14 @@ namespace ContourSearcher.UI.ViewModels.Pages
     {
         #region Fields
 
-        private string m_ImageSmoothingWindowName;        
         private bool m_useDynamicMode;
         private string m_SourceWindow;
 
-        private ObservableCollection<string> m_WindowNames;
+        private ObservableCollection<string> m_ActiveWindowNames;
         private SmoothingType m_SmoothingType;
 
-        private string m_size1;
+        //private string m_size1;
+        private int m_size1;
         private string m_size2;
 
         private string m_sigma1;
@@ -40,32 +35,90 @@ namespace ContourSearcher.UI.ViewModels.Pages
         #region Properties
 
         public ObservableCollection<string> ActiveWindows
-        { get => m_WindowNames; set => m_WindowNames = value; }
-
-        [ValidateProperty]
-        public string ImageSmoothingWindowName
-        { get => m_ImageSmoothingWindowName; set => Set(ref m_ImageSmoothingWindowName, value); }
+        { get => m_ActiveWindowNames; set => m_ActiveWindowNames = value; }
 
         public bool UseDynamicMode 
         { get=>m_useDynamicMode; set=>Set(ref m_useDynamicMode, value); }
 
-        public string ImgSource
+        public string ImgSourceForSmooth
         { get => m_SourceWindow; set => Set(ref m_SourceWindow, value); }
 
         public SmoothingType SmoothingType
-        { get => m_SmoothingType; set => Set(ref m_SmoothingType, value); }
+        { 
+            get => m_SmoothingType;
+            set
+            {
+                Set(ref m_SmoothingType, value);
+
+                if (UseDynamicMode)
+                    SmoothImage();
+            }
+        }
+
+        public int Size1
+        {
+            get=> m_size1;
+            set 
+            {
+                Set(ref m_size1, value);
+
+                if (UseDynamicMode)
+                    SmoothImage();
+            }
+        }
+
+        //[ValidateProperty]
+        //public string Size1 
+        //{ 
+        //    get => m_size1;
+        //    set 
+        //    {
+        //        Set(ref m_size1, value);
+
+        //        if (UseDynamicMode)
+        //            SmoothImage();
+        //    }
+        //}
 
         [ValidateProperty]
-        public string Size1 { get => m_size1; set => Set(ref m_size1, value); }
+        public string Size2 
+        {
+            get => m_size2;
+            set 
+            {
+                Set(ref m_size2, value); 
+                
+                if(UseDynamicMode)
+                    SmoothImage();
+            }
+        }
 
         [ValidateProperty]
-        public string Size2 { get => m_size2; set => Set(ref m_size2, value); }
+        public string Sigma1 
+        {
+            get => m_sigma1;
+
+            set 
+            { 
+                Set(ref m_sigma1, value);
+
+                if (UseDynamicMode)
+                    SmoothImage();
+            }
+        }
 
         [ValidateProperty]
-        public string Sigma1 { get => m_sigma1; set => Set(ref m_sigma1, value); }
+        public string Sigma2
+        {
+            get => m_sigma2;
+            set
+            {
+                Set(ref m_sigma2, value);
 
-        [ValidateProperty]
-        public string Sigma2 { get => m_sigma2; set => Set(ref m_sigma2, value); }
+                if(UseDynamicMode)
+                    SmoothImage();
+            }
+        }
 
         #endregion
 
@@ -78,9 +131,9 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
                 switch (columnName)
                 {
-                    case nameof(Size1):
-                        SetValidArrayValue(0, ValidationHelper.ValidateNumber(Size1, out error, Constants.DEFAULT_INPUT_VALUE));
-                        break;
+                    //case nameof(Size1):
+                    //    SetValidArrayValue(0, ValidationHelper.ValidateNumber(Size1, out error, Constants.DEFAULT_INPUT_VALUE));
+                    //    break;
                     case nameof(Size2):
                         SetValidArrayValue(1, ValidationHelper.ValidateNumber(Size2, out error, Constants.DEFAULT_INPUT_VALUE));
                         break;
@@ -115,13 +168,10 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             InitValidArray(this);
 
-            m_ImageSmoothingWindowName = Constants.SMOOTHED_IMAGE_NAME;
-
-            m_WindowNames = new ObservableCollection<string>();
-            m_SourceWindow = Constants.DEFAULT_INPUT_VALUE;
+            m_ActiveWindowNames = new ObservableCollection<string>();
+            m_SourceWindow = string.Empty;
             m_useDynamicMode = false;
             m_SmoothingType = SmoothingType.CV_BLUR_NO_SCALE;
-            m_size1 = Constants.DEFAULT_INPUT_VALUE;
             m_size2 = Constants.DEFAULT_INPUT_VALUE;
             m_sigma1 = Constants.DEFAULT_INPUT_VALUE;
             m_sigma2 = Constants.DEFAULT_INPUT_VALUE;
@@ -142,13 +192,28 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         private void SmoothImage()
         {
-            
+            try
+            {
+                int size2 = int.Parse(Size2);
+
+                double sigma1 = double.Parse(Sigma1);
+                double sigma2 = double.Parse(Sigma2);
+
+                m_CVSystem.SmoothImage(ImgSourceForSmooth, (int)SmoothingType, Size1, size2, sigma1, sigma2);
+                m_CVSystem.DisplayImageInExistingWindow(ImgSourceForSmooth, ImgSourceForSmooth);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                throw;
+#endif
+            }
         }
 
         #region On Smooth Button Pressed Execute
 
         private bool CanOnSmoothButtonPressedExecute(object p) =>
-            ValidateFields(0, 3);
+            ValidateFields(0, 3) && !UseDynamicMode;
 
         private void OnSmoothButtonPressedExecute(object p)
         {

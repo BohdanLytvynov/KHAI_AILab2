@@ -8,7 +8,7 @@ namespace CSharpBusinessLayer.Validators
 {
     public static class ValidationHelper
     {
-        public static bool IsNSLValid(string value, out string error, string defValue = "enter smth")
+        public static bool IsNSLValid(string value, out string error, string defValue)
         {
             error = string.Empty;
 
@@ -56,7 +56,7 @@ namespace CSharpBusinessLayer.Validators
             }
         }
 
-        public static bool ValidateNumber(string value, out string error, string defValue = "enter smth")
+        public static bool ValidateNumber(string value, out string error, string defValue)
         {
             error = string.Empty;
 
@@ -93,7 +93,7 @@ namespace CSharpBusinessLayer.Validators
             return true;
         }
 
-        public static bool ValidateText(string value, out string error, string defValue = "enter smth")
+        public static bool ValidateText(string value, out string error, string defValue)
         {
             error = string.Empty;
 

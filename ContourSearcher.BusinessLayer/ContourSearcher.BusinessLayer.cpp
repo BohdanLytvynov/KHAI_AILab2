@@ -151,20 +151,45 @@ void ContourSearcherBusinessLayer::OpenCV::CloneImage(String^ imgName, String^ n
 	}
 }
 
-void ContourSearcherBusinessLayer::OpenCV::SmoothImage(String^ imgToSmooth, Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2)
+void ContourSearcherBusinessLayer::OpenCV::SmoothImage(String^ imgToSmooth, 
+	Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2)
 {
-	std::string imgToSmooth_str = MarshalManagedString(imgToSmooth);
-
-	auto img = m_ImageStorage->find(imgToSmooth_str);
-
-	if (img != m_ImageStorage->end())
+	try
 	{
-		auto dest = cvCloneImage(img->second);
+		std::string imgToSmooth_str = MarshalManagedString(imgToSmooth);
 
-		cvSmooth(img->second, dest, smoothType, size1, size2, sigma1, sigma2);
+		auto img = m_ImageStorage->find(imgToSmooth_str);
 
-		cvShowImage(img->first.c_str(), img->second);
+		if (img != m_ImageStorage->end())
+		{
+			auto imgCloned = cvCloneImage(img->second);
 
-		cvWaitKey(0);
+			cvSmooth(img->second, imgCloned, smoothType, size1, size2, sigma1, sigma2);
+
+			(*m_ImageStorage)[imgToSmooth_str] = imgCloned;
+
+			cvShowImage(imgToSmooth_str.c_str(), imgCloned);
+		}
+	}
+	catch (System::Exception ex())
+	{
+		throw;
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::DisplayImageInExistingWindow(String^ imgToSmooth, String^ existingWindow)
+{
+	try
+	{
+		std::string imgToSmooth_str = MarshalManagedString(imgToSmooth);
+		std::string existingWindow_str = MarshalManagedString(existingWindow);
+
+		auto img = m_ImageStorage->find(imgToSmooth_str);
+
+		cvShowImage(existingWindow_str.c_str(), img->second);
+	}
+	catch (System::Exception ex())
+	{
+		throw;
 	}
 }

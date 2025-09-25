@@ -60,7 +60,7 @@ namespace UserControls
 
         public ImageViewer()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         public string Path

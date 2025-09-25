@@ -235,7 +235,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
                 ActiveWindows.Add(ImageLoadingWindowName);
 
                 m_cvSystem.LoadToOpenCV(ChosenImagePath, ImageLoadingWindowName, (Int32)ImageToLoadType);
-                m_cvSystem.DisplayImageInWindow(ImageLoadingWindowName, ImageLoadingWindowName);                
+                m_cvSystem.DisplayImageInWindow(ImageLoadingWindowName, ImageLoadingWindowName);
             }
             catch (Exception ex)
             {
