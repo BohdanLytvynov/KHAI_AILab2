@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages"
       xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages"
       xmlns:fa5="http://schemas.fontawesome.com/icons/"
-      xmlns:custControls="clr-namespace:ContourSearcher.UI.CustomUserControls"
+      xmlns:custControls="clr-namespace:UserControls;assembly=UserControls"
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance vm:ImageProcessingViewModel, IsDesignTimeCreatable=True}"
@@ -51,45 +51,33 @@
                         UpdateSourceTrigger=PropertyChanged,
                         Mode=TwoWay}"/>
 
-                    <custControls:Slider LabelText="Size1:" Deliminator="," ErrorStyle="{StaticResource SliderErrorStyle}"
+                    <custControls:Slider LabelText="Size1:" Deliminator=","
                                          LabelStyle="{StaticResource InputTxtBoxLabel}"
                                          Margin="20" Value="{Binding Size1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                          SliderStyle="{StaticResource SliderIntStyle}"
-                                         IntegerPartTextBoxStyle="{StaticResource SliderTxtBoxes}"
-                                         FloatPartTextBoxStyleProperty="{StaticResource SliderTxtBoxes}"/>
+                                         IntegerPartTextBoxStyle="{StaticResource TxtBoxInputStyle}"
+                                         FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>
 
-                    <!--<StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                        <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size1:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
-                                 Text="{Binding ElementName=Size1Slider, 
-                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
-                        <Slider x:Name="Size1Slider"
-                                Style="{StaticResource SliderStyle}"/>
-                    </StackPanel>-->
+                    <custControls:Slider LabelText="Size2:" Deliminator=","
+                        LabelStyle="{StaticResource InputTxtBoxLabel}"
+                        Margin="20" Value="{Binding Size2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        SliderStyle="{StaticResource SliderIntStyle}"
+                        IntegerPartTextBoxStyle="{StaticResource TxtBoxInputStyle}"
+                        FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>
 
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                        <Label Style="{StaticResource InputTxtBoxLabel}" Content="Size2:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
-                                 Text="{Binding ElementName=Size2Slider, UpdateSourceTrigger=PropertyChanged, 
-                            Mode=TwoWay,Path=Value, StringFormat={}{0:#.##}}"/>
-                        <Slider x:Name="Size2Slider" Style="{StaticResource SliderStyle}"/>
-                    </StackPanel>
+                    <custControls:Slider LabelText="Sigma1:" Deliminator=","
+                        LabelStyle="{StaticResource InputTxtBoxLabel}"
+                        Margin="20" Value="{Binding Sigma1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        SliderStyle="{StaticResource SliderFloatStyle}"
+                        IntegerPartTextBoxStyle="{StaticResource TxtBoxInputStyle}"
+                        FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>
 
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                        <Label Style="{StaticResource InputTxtBoxLabel}" Content="Sigma1:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
-                                 Text="{Binding ElementName=Sigma1Slider, 
-                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
-                        <Slider x:Name="Sigma1Slider" Style="{StaticResource SliderStyle}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                        <Label Style="{StaticResource InputTxtBoxLabel}" Content="Sigma2:"/>
-                        <TextBox Style="{StaticResource TxtBoxInputStyle}"
-                                 Text="{Binding ElementName=Sigma2Slider, 
-                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=Value, StringFormat={}{0:#.##}}"/>
-                        <Slider x:Name="Sigma2Slider" Style="{StaticResource SliderStyle}"/>
-                    </StackPanel>
+                    <custControls:Slider LabelText="Sigma2:" Deliminator=","
+                        LabelStyle="{StaticResource InputTxtBoxLabel}"
+                        Margin="20" Value="{Binding Sigma2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        SliderStyle="{StaticResource SliderFloatStyle}"
+                        IntegerPartTextBoxStyle="{StaticResource TxtBoxInputStyle}"
+                        FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>
 
                     <Grid Margin="0,5">
                         <Grid.ColumnDefinitions>

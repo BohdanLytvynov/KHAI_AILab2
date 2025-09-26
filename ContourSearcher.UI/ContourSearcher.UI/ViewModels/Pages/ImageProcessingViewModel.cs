@@ -24,10 +24,10 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         //private string m_size1;
         private int m_size1;
-        private string m_size2;
+        private int m_size2;
 
-        private string m_sigma1;
-        private string m_sigma2;
+        private double m_sigma1;
+        private double m_sigma2;
 
         private ICVSystem m_CVSystem;
         #endregion
@@ -66,22 +66,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
                     SmoothImage();
             }
         }
-
-        //[ValidateProperty]
-        //public string Size1 
-        //{ 
-        //    get => m_size1;
-        //    set 
-        //    {
-        //        Set(ref m_size1, value);
-
-        //        if (UseDynamicMode)
-        //            SmoothImage();
-        //    }
-        //}
-
-        [ValidateProperty]
-        public string Size2 
+        
+        public int Size2
         {
             get => m_size2;
             set 
@@ -92,9 +78,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
                     SmoothImage();
             }
         }
-
-        [ValidateProperty]
-        public string Sigma1 
+        
+        public double Sigma1 
         {
             get => m_sigma1;
 
@@ -106,9 +91,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
                     SmoothImage();
             }
         }
-
-        [ValidateProperty]
-        public string Sigma2
+        
+        public double Sigma2
         {
             get => m_sigma2;
             set
@@ -120,34 +104,6 @@ namespace ContourSearcher.UI.ViewModels.Pages
             }
         }
 
-        #endregion
-
-        #region IData Error Info
-        public override string this[string columnName]
-        {
-            get
-            {
-                string error = string.Empty;
-
-                switch (columnName)
-                {
-                    //case nameof(Size1):
-                    //    SetValidArrayValue(0, ValidationHelper.ValidateNumber(Size1, out error, Constants.DEFAULT_INPUT_VALUE));
-                    //    break;
-                    case nameof(Size2):
-                        SetValidArrayValue(1, ValidationHelper.ValidateNumber(Size2, out error, Constants.DEFAULT_INPUT_VALUE));
-                        break;
-                    case nameof(Sigma1):
-                        SetValidArrayValue(2, ValidationHelper.ValidateNumber(Sigma1, out error, Constants.DEFAULT_INPUT_VALUE));
-                        break;
-                    case nameof(Sigma2):
-                        SetValidArrayValue(3, ValidationHelper.ValidateNumber(Sigma2, out error, Constants.DEFAULT_INPUT_VALUE));
-                        break;
-                }
-
-                return error;
-            }
-        }
         #endregion
 
         #region Commands
@@ -172,9 +128,6 @@ namespace ContourSearcher.UI.ViewModels.Pages
             m_SourceWindow = string.Empty;
             m_useDynamicMode = false;
             m_SmoothingType = SmoothingType.CV_BLUR_NO_SCALE;
-            m_size2 = Constants.DEFAULT_INPUT_VALUE;
-            m_sigma1 = Constants.DEFAULT_INPUT_VALUE;
-            m_sigma2 = Constants.DEFAULT_INPUT_VALUE;
 
             OnSmoothImageButtonPressed = new Command(
                 OnSmoothButtonPressedExecute,
@@ -194,12 +147,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             try
             {
-                int size2 = int.Parse(Size2);
-
-                double sigma1 = double.Parse(Sigma1);
-                double sigma2 = double.Parse(Sigma2);
-
-                m_CVSystem.SmoothImage(ImgSourceForSmooth, (int)SmoothingType, Size1, size2, sigma1, sigma2);
+                m_CVSystem.SmoothImage(ImgSourceForSmooth, (int)SmoothingType, Size1, Size2, Sigma1, Sigma2);
                 m_CVSystem.DisplayImageInExistingWindow(ImgSourceForSmooth, ImgSourceForSmooth);
             }
             catch (Exception ex)
@@ -213,7 +161,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
         #region On Smooth Button Pressed Execute
 
         private bool CanOnSmoothButtonPressedExecute(object p) =>
-            ValidateFields(0, 3) && !UseDynamicMode;
+            !UseDynamicMode;
 
         private void OnSmoothButtonPressedExecute(object p)
         {

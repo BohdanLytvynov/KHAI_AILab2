@@ -1,16 +1,42 @@
 ﻿using System.ComponentModel;
-using System.Net.Security;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ContourSearcher.UI.CustomUserControls
+namespace UserControls
 {
     /// <summary>
     /// Interaction logic for Slider.xaml
     /// </summary>
-    public partial class Slider : UserControl
+    public partial class Slider : UserControl, INotifyPropertyChanged, IDataErrorInfo
     {
-        private bool m_TextBoxFlow;//Value is changed via textBlocks - true
+        #region Fields
+        private string m_IntegerPartValueString;
+        private string m_FloatPartValueString;
+        #endregion
+
+        #region Properties
+
+        public string IntegerPartValueString
+        {
+            get => m_IntegerPartValueString;
+            set
+            {
+                Set(ref m_IntegerPartValueString, value);
+            }
+        }
+
+        public string FloatPartValueString
+        {
+            get => m_FloatPartValueString;
+            set
+            {
+                Set(ref m_FloatPartValueString, value);
+            }
+        }
+
+        #endregion
 
         #region DependencyProperties
 
@@ -41,15 +67,6 @@ namespace ContourSearcher.UI.CustomUserControls
         // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ValueProperty;
 
-        public Style ErrorStyle
-        {
-            get { return (Style)GetValue(ErrorStyleProperty); }
-            set { SetValue(ErrorStyleProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ErrorStyle.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ErrorStyleProperty;
-        
         public Style BorderStyle
         {
             get { return (Style)GetValue(BorderStyleProperty); }
@@ -110,8 +127,98 @@ namespace ContourSearcher.UI.CustomUserControls
             set { SetValue(SliderStyleProperty, value); }
         }
 
+        #region IDataErrorInfo Implementation
+        public string Error => throw new NotImplementedException();
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(IntegerPartValueString):
+                        int v;
+                        if (!int.TryParse(IntegerPartValueString, out v))
+                        {
+                            error = "Not a number!";
+                        }
+                        else
+                        {
+                            var value = this.Value.ToString();
+                            var arr = value.Split(',');
+                            if (value.Contains(','))
+                            {
+                                this.Value = double.Parse(IntegerPartValueString + "," + arr[1]);
+                            }
+                            else
+                            {
+                                this.Value = double.Parse(IntegerPartValueString);
+                            }
+                        }
+                        break;
+                    case nameof(FloatPartValueString):
+                        if (!isNumbers(FloatPartValueString, out error)) { }
+                        else
+                        {
+                            var value = this.Value.ToString();
+                            var arr = value.Split(',');
+                            if (value.Contains(','))
+                            {
+                                this.Value = double.Parse(arr[0] + "," + FloatPartValueString);
+                            }
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
+
+        private bool isNumbers(string value, out string error)
+        {
+            error = string.Empty;
+            foreach (var item in value)
+            {
+                if (!Char.IsDigit(item))
+                {
+                    error = "Not a number!";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        #endregion
+
         // Using a DependencyProperty as the backing store for SliderStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SliderStyleProperty;
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void OnPropertyChanged(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
+        public virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
+        {
+            if (field == null) throw new ArgumentNullException(nameof(field));
+
+            if (value.Equals(field))
+            {
+                return false;
+            }
+            else
+            {
+                field = value;
+                OnPropertyChanged(propName);
+                return true;
+            }
+        }
+        #endregion
 
         #endregion
 
@@ -120,7 +227,7 @@ namespace ContourSearcher.UI.CustomUserControls
         static Slider()
         {
             DeliminatorProperty =
-            DependencyProperty.Register("Deliminator", typeof(string), 
+            DependencyProperty.Register("Deliminator", typeof(string),
             typeof(Slider), new PropertyMetadata(",", OnDeliminatorPropertyChanged));
 
             LabelStyleProperty =
@@ -144,7 +251,7 @@ namespace ContourSearcher.UI.CustomUserControls
                 typeof(Slider), new PropertyMetadata(new Style(), OnStackHorizontalStyleChanged));
 
             SliderStyleProperty =
-            DependencyProperty.Register("SliderStyle", typeof(Style), 
+            DependencyProperty.Register("SliderStyle", typeof(Style),
             typeof(Slider), new PropertyMetadata(new Style(), OnSliderStyleChanged));
 
             ValueProperty =
@@ -152,23 +259,12 @@ namespace ContourSearcher.UI.CustomUserControls
                 typeof(Slider), new PropertyMetadata(0.0, OnValuePropertyChanged));
 
             LabelTextProperty =
-            DependencyProperty.Register("LabelText", typeof(string), 
+            DependencyProperty.Register("LabelText", typeof(string),
             typeof(Slider), new PropertyMetadata(string.Empty, OnLabelTextPropertyChanged));
 
             BorderStyleProperty =
-            DependencyProperty.Register("BorderStyle", typeof(Style), 
+            DependencyProperty.Register("BorderStyle", typeof(Style),
             typeof(Slider), new PropertyMetadata(new Style(), OnBorderStylePropertyChanged));
-
-            ErrorStyleProperty =
-            DependencyProperty.Register("ErrorStyle",
-                typeof(Style), typeof(Slider),
-                new PropertyMetadata(new Style(), OnErrorStylePropertyChanged));
-        }
-
-        private static void OnErrorStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var This = (Slider)d;
-            This.ErrorStyle = (Style)e.NewValue;
         }
 
         private static void OnBorderStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -180,7 +276,21 @@ namespace ContourSearcher.UI.CustomUserControls
         private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = (Slider)d;
-            This.Value = double.Parse(e.NewValue.ToString());
+            var newValue = (double)e.NewValue;
+            if (This.Value != newValue)
+                This.Value = newValue;
+
+            var currentValue = This.Value.ToString();
+            var arr = currentValue.Split(',');
+            if (currentValue.Contains(','))
+            {
+                This.IntegerPartValueString = arr[0];
+                This.FloatPartValueString = arr[1];
+            }
+            else
+            {
+                This.IntegerPartValueString = arr[0];
+            }
         }
 
         private static void OnDeliminatorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -191,8 +301,9 @@ namespace ContourSearcher.UI.CustomUserControls
 
         public Slider()
         {
+            m_IntegerPartValueString = "0";
+            m_FloatPartValueString = "0";
             InitializeComponent();
-            m_TextBoxFlow = false;
         }
 
         #endregion

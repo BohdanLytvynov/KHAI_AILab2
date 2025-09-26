@@ -133,5 +133,20 @@ namespace CSharpBusinessLayer.Validators
 
             return true;
         }
+
+        public static bool ValidateNumber(string value, out string error)
+        { 
+            error = string.Empty;
+
+            foreach (char c in value)
+            {
+                if (!Char.IsDigit(c))
+                {
+                    error = "Not a number!";
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
