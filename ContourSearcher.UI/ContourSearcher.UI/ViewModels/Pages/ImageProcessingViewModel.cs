@@ -37,14 +37,17 @@ namespace ContourSearcher.UI.ViewModels.Pages
         public ObservableCollection<string> ActiveWindows
         { get => m_ActiveWindowNames; set => m_ActiveWindowNames = value; }
 
-        public bool UseDynamicMode 
-        { get=>m_useDynamicMode; set=>Set(ref m_useDynamicMode, value); }
+        public bool UseDynamicMode
+        { get => m_useDynamicMode; set => Set(ref m_useDynamicMode, value); }
 
         public string ImgSourceForSmooth
-        { get => m_SourceWindow; set => Set(ref m_SourceWindow, value); }
+        {
+            get => m_SourceWindow;
+            set => SetToDefaultIfNull(ref m_SourceWindow, value, string.Empty);
+        }
 
         public SmoothingType SmoothingType
-        { 
+        {
             get => m_SmoothingType;
             set
             {
@@ -57,8 +60,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         public int Size1
         {
-            get=> m_size1;
-            set 
+            get => m_size1;
+            set
             {
                 Set(ref m_size1, value);
 
@@ -66,32 +69,32 @@ namespace ContourSearcher.UI.ViewModels.Pages
                     SmoothImage();
             }
         }
-        
+
         public int Size2
         {
             get => m_size2;
-            set 
+            set
             {
-                Set(ref m_size2, value); 
-                
-                if(UseDynamicMode)
+                Set(ref m_size2, value);
+
+                if (UseDynamicMode)
                     SmoothImage();
             }
         }
-        
-        public double Sigma1 
+
+        public double Sigma1
         {
             get => m_sigma1;
 
-            set 
-            { 
+            set
+            {
                 Set(ref m_sigma1, value);
 
                 if (UseDynamicMode)
                     SmoothImage();
             }
         }
-        
+
         public double Sigma2
         {
             get => m_sigma2;
@@ -99,7 +102,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
             {
                 Set(ref m_sigma2, value);
 
-                if(UseDynamicMode)
+                if (UseDynamicMode)
                     SmoothImage();
             }
         }
@@ -145,6 +148,9 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         private void SmoothImage()
         {
+            if (!CanSmooth())
+                return;
+
             try
             {
                 m_CVSystem.SmoothImage(ImgSourceForSmooth, (int)SmoothingType, Size1, Size2, Sigma1, Sigma2);
@@ -161,7 +167,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
         #region On Smooth Button Pressed Execute
 
         private bool CanOnSmoothButtonPressedExecute(object p) =>
-            !UseDynamicMode;
+            !UseDynamicMode
+            && CanSmooth();
 
         private void OnSmoothButtonPressedExecute(object p)
         {
@@ -182,6 +189,15 @@ namespace ContourSearcher.UI.ViewModels.Pages
         }
 
         #endregion
+
+        private bool CanSmooth()
+        {
+            return Size1 > 0
+                && Size2 > 0
+                && Sigma1 > 0
+                && Sigma2 > 0
+                && !string.IsNullOrEmpty(ImgSourceForSmooth);
+        }
 
         #endregion
     }

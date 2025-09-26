@@ -169,6 +169,7 @@ void ContourSearcherBusinessLayer::OpenCV::SmoothImage(String^ imgToSmooth,
 			(*m_ImageStorage)[imgToSmooth_str] = imgCloned;
 
 			cvShowImage(imgToSmooth_str.c_str(), imgCloned);
+			cvWaitKey(0);
 		}
 	}
 	catch (System::Exception ex())
@@ -177,11 +178,11 @@ void ContourSearcherBusinessLayer::OpenCV::SmoothImage(String^ imgToSmooth,
 	}
 }
 
-void ContourSearcherBusinessLayer::OpenCV::DisplayImageInExistingWindow(String^ imgToSmooth, String^ existingWindow)
+void ContourSearcherBusinessLayer::OpenCV::DisplayImageInExistingWindow(String^ imgToDisplay, String^ existingWindow)
 {
 	try
 	{
-		std::string imgToSmooth_str = MarshalManagedString(imgToSmooth);
+		std::string imgToSmooth_str = MarshalManagedString(imgToDisplay);
 		std::string existingWindow_str = MarshalManagedString(existingWindow);
 
 		auto img = m_ImageStorage->find(imgToSmooth_str);
@@ -191,5 +192,27 @@ void ContourSearcherBusinessLayer::OpenCV::DisplayImageInExistingWindow(String^ 
 	catch (System::Exception ex())
 	{
 		throw;
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::FreeImage(String^ imgName)
+{
+	std::string img_name = MarshalManagedString(imgName);
+
+	auto img = m_ImageStorage->find(img_name);
+	if (img != m_ImageStorage->end())
+	{
+		cvReleaseImage(&img->second);
+	}
+
+	m_ImageStorage->erase(img_name);
+}
+
+void ContourSearcherBusinessLayer::OpenCV::DestroyWindow(String^ windowName)
+{
+	std::string winName = MarshalManagedString(windowName);
+	if (!winName.empty())
+	{
+		cvDestroyWindow(winName.c_str());
 	}
 }

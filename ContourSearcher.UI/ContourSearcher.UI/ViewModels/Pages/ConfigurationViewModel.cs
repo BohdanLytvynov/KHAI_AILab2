@@ -19,6 +19,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         private string m_ChosenImagePath;
         private string m_ImageLoadingWindowName;
+        private string m_ImageForReleaseName;
         private string m_SelectedSourceWindow;
         private string m_CloneImageName;
 
@@ -40,6 +41,12 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             get=>m_SelectedSourceWindow;
             set=>SetToDefaultIfNull(ref m_SelectedSourceWindow, value, string.Empty);
+        }
+
+        public string ImageForReleaseName 
+        {
+            get=> m_ImageForReleaseName; 
+            set=> SetToDefaultIfNull(ref m_ImageForReleaseName, value, string.Empty);
         }
 
         [ValidateProperty]
@@ -86,6 +93,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         public ICommand OnAddToImageProcessingPressed { get; }
 
+        public ICommand OnReleaseImageButtonPressed { get; }
+
         public ICommand OnCloneImageButtonPressed { get; }
 
         #endregion
@@ -128,6 +137,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
             m_ImageLoadingWindowName = Constants.ORIGINAL_IMAGE_NAME;
             m_ChosenImagePath = string.Empty;
             m_SelectedSourceWindow = string.Empty;
+            m_ImageForReleaseName = string.Empty;
             m_CloneImageName = Constants.DEFAULT_INPUT_VALUE;
 
             m_LoadedImages = new ObservableCollection<string>();
@@ -159,6 +169,12 @@ namespace ContourSearcher.UI.ViewModels.Pages
                 (
                     OnCloneImageButtonPressedExecute, 
                     CanOnCloneImageButtonPressedExecute
+                );
+
+            OnReleaseImageButtonPressed = new Command
+                (
+                    OnReleaseButtonPressedExecute,
+                    CanOnReleaseButtonPressedExecute
                 );
 
             ShareData.InsertItem(Constants.ACTIVE_WINDOW_LIST_COLLECTION, new List<string>());
@@ -238,6 +254,32 @@ namespace ContourSearcher.UI.ViewModels.Pages
                 m_cvSystem.DisplayImageInWindow(ImageLoadingWindowName, ImageLoadingWindowName);
             }
             catch (Exception ex)
+            {
+#if DEBUG
+                throw;
+#endif
+            }
+        }
+        #endregion
+
+        #region On Release Image Button Pressed
+
+        private bool CanOnReleaseButtonPressedExecute(object p) => 
+            !string.IsNullOrEmpty(ImageForReleaseName);
+
+        private void OnReleaseButtonPressedExecute(object p)
+        {
+            try
+            {
+                string name = ImageForReleaseName;
+                var windows = ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION);
+                windows.Remove(ImageForReleaseName);
+                UIHelper.RefreshObservableCollection(ActiveWindows, windows);
+
+                m_cvSystem.FreeImage(name);
+                m_cvSystem.DestroyWindow(name);
+            }
+            catch (Exception)
             {
 #if DEBUG
                 throw;

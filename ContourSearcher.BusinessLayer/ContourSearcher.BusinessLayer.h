@@ -20,6 +20,10 @@ namespace ContourSearcherBusinessLayer {
 		void SmoothImage(String^ imgToSmooth, Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2);
 
 		void DisplayImageInExistingWindow(String^ imgToSmooth, String^ existingWindow);
+
+		void FreeImage(String^ imgName);
+
+		void DestroyWindow(String^ windowName);
 	};
 
 
@@ -64,7 +68,11 @@ namespace ContourSearcherBusinessLayer {
 
 		virtual void SmoothImage(String^ imgToSmooth, Int32 smoothType, Int32 size1, Int32 size2, Double sigma1, Double sigma2) override;
 
-		virtual void DisplayImageInExistingWindow(String^ imgToSmooth, String^ existingWindow) override;
+		virtual void DisplayImageInExistingWindow(String^ imgToDisplay, String^ existingWindow) override;
+
+		virtual void FreeImage(String^ imgName) override;
+
+		virtual void DestroyWindow(String^ windowName) override;
 #pragma endregion
 
 

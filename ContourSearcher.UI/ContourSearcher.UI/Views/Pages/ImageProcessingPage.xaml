@@ -19,12 +19,9 @@
         <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
                 <StackPanel Orientation="Vertical" Height="700">
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                    <TextBlock Text="Image Smoothing:" Style="{StaticResource DescLabel}"/>
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
-
+                    
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
-                        <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
+                        <Label Content="Choose source image for processing:" Style="{StaticResource InputTxtBoxLabel}"/>
                         <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding ImgSourceForSmooth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsPressed}"
@@ -35,6 +32,10 @@
                                 Foreground="#FF6B6B6B"/>
                         </Button>
                     </StackPanel>
+
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                    <TextBlock Text="Image Smoothing:" Style="{StaticResource DescLabel}"/>
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
                     <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Choose smoothing:"/>
@@ -51,7 +52,7 @@
                         UpdateSourceTrigger=PropertyChanged,
                         Mode=TwoWay}"/>
 
-                    <custControls:Slider LabelText="Size1:" Deliminator=","
+                    <!--<custControls:Slider LabelText="Size1:" Deliminator=","
                                          LabelStyle="{StaticResource InputTxtBoxLabel}"
                                          Margin="20" Value="{Binding Size1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                          SliderStyle="{StaticResource SliderIntStyle}"
@@ -77,7 +78,7 @@
                         Margin="20" Value="{Binding Sigma2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         SliderStyle="{StaticResource SliderFloatStyle}"
                         IntegerPartTextBoxStyle="{StaticResource TxtBoxInputStyle}"
-                        FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>
+                        FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>-->
 
                     <Grid Margin="0,5">
                         <Grid.ColumnDefinitions>
@@ -90,7 +91,16 @@
         Command="{Binding OnSmoothImageButtonPressed}"
                                 Style="{StaticResource SimpleButton}"/>
                     </Grid>
+
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                    <TextBlock Text="Histograms:" Style="{StaticResource DescLabel}"/>
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                    
+                    
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                    
+                    
                 </StackPanel>
             </ScrollViewer>
         </Border>
