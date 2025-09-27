@@ -34,10 +34,10 @@
                     </StackPanel>
 
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                    <TextBlock Text="Image Smoothing:" Style="{StaticResource DescLabel}"/>
+                    <TextBlock Text="Image Smoothing: (Comming soon)" Style="{StaticResource DescLabel}"/>
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                    <!--<StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Choose smoothing:"/>
                         <ComboBox ItemsSource="{Binding Source={StaticResource SmoothingType}}"
                                       SelectedItem="{Binding SmoothingType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -50,7 +50,7 @@
                         FontSize="20"
                         IsChecked="{Binding UseDynamicMode,
                         UpdateSourceTrigger=PropertyChanged,
-                        Mode=TwoWay}"/>
+                        Mode=TwoWay}"/>-->
 
                     <!--<custControls:Slider LabelText="Size1:" Deliminator=","
                                          LabelStyle="{StaticResource InputTxtBoxLabel}"
@@ -80,7 +80,7 @@
                         IntegerPartTextBoxStyle="{StaticResource TxtBoxInputStyle}"
                         FloatPartTextBoxStyleProperty="{StaticResource TxtBoxInputStyle}"/>-->
 
-                    <Grid Margin="0,5">
+                    <!--<Grid Margin="0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="155"/>
@@ -90,7 +90,7 @@
         Content="Smooth Image"
         Command="{Binding OnSmoothImageButtonPressed}"
                                 Style="{StaticResource SimpleButton}"/>
-                    </Grid>
+                    </Grid>-->
 
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
                     <TextBlock Text="Histograms:" Style="{StaticResource DescLabel}"/>
