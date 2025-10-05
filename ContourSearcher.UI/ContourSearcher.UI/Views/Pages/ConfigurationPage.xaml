@@ -17,7 +17,7 @@
                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
                 <TextBlock Text="Image Loading:" Style="{StaticResource DescLabel}"/>
                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
+                <StackPanel Style="{StaticResource HorizontalStack}">
                     <Label Content="Enter window name:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <TextBox Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>
@@ -30,7 +30,7 @@
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
+                <StackPanel Style="{StaticResource HorizontalStack}">
                     <Label Content="Choose Image:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <ComboBox ItemsSource="{Binding LoadedImages, UpdateSourceTrigger=PropertyChanged}"
                               SelectedItem="{Binding ChosenImagePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -52,7 +52,7 @@
                         </fa5:SvgAwesome>
                     </Button>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                <StackPanel Style="{StaticResource HorizontalStack}">
                     <Label Content="Choose Image Loading Mode:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <ComboBox ItemsSource="{Binding Source={StaticResource ImageTypeEnum}}"
                   SelectedItem="{Binding ImageToLoadType, 
@@ -75,7 +75,7 @@
                 <TextBlock Text="Image Releasing:" Style="{StaticResource DescLabel}"/>
                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
-                <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                <StackPanel Style="{StaticResource HorizontalStack}">
                     <Label Content="Choose image for release:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding ImageForReleaseName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -105,7 +105,7 @@
                 <TextBlock Text="Image Cloning:" Style="{StaticResource DescLabel}"/>
                 <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
-                <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                <StackPanel Style="{StaticResource HorizontalStack}">
                     <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding SelectedSourceWindow, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -120,7 +120,7 @@
                     </Button>
                 </StackPanel>
 
-                <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Horizontal">
+                <StackPanel Style="{StaticResource HorizontalStack}">
                     <Label Content="Enter destination window/image name:" Style="{StaticResource InputTxtBoxLabel}"/>
                     <TextBox Style="{StaticResource TxtBoxInputStyle}">
                         <TextBox.Text>

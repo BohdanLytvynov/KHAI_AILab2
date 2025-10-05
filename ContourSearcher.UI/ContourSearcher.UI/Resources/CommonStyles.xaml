@@ -115,6 +115,7 @@
         <Style.Setters>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="ItemsControl.FontSize" Value="18"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
         </Style.Setters>
     </Style>
 
@@ -151,46 +152,13 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <Style x:Key="InputTxtBoxLabel" TargetType="Label">
-        <Style.Setters>
-            <Setter Property="ItemsControl.FontSize" Value="18"/>
-        </Style.Setters>
-    </Style>
-
+    
     <Style x:Key="SliderTxtBoxes" TargetType="TextBox">
         <Style.Setters>
             <Setter Property="FontSize" Value="{StaticResource txtBoxInputFontSize}"/>
         </Style.Setters>
     </Style>
-
-    <Style x:Key="TxtBoxInputStyle" TargetType="TextBox">
-        <Style.Setters>
-            <Setter Property="ItemsControl.FontSize" Value="{StaticResource txtBoxInputFontSize}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Border BorderBrush="OrangeRed" BorderThickness="2">
-                            <Grid>
-                                <AdornedElementPlaceholder/>
-                                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="OrangeRed"
-                                       VerticalAlignment="Bottom" HorizontalAlignment="Left" 
-                                       FontSize="{StaticResource txtBoxInputErrorFontSize}"/>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style.Setters>
-        <Style.Triggers>
-            <Trigger Property="Validation.HasError" Value="False">
-                <Setter Property="BorderBrush" Value="#FF23A829"/>
-                <Setter Property="BorderThickness" Value="2"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
+    
     <Style x:Key="SimpleButton" TargetType="Button">
         <Style.Setters>
             <Setter Property="FontSize" Value="20"/>
@@ -203,42 +171,26 @@
         </Style.Setters>
     </Style>
 
-    <Style x:Key="SliderStyle" TargetType="Slider">
-        <Style.Setters>
-            <Setter Property="Width" Value="500"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="30,0,0,0"/>
-            <Setter Property="TickPlacement" Value="BottomRight"/>
-            <Setter Property="TickFrequency" Value="0.001"/>
-            <Setter Property="Minimum" Value="0.0001"/>
-            <Setter Property="Maximum" Value="100"/>
-            <Setter Property="Foreground" Value="Black"/>
-        </Style.Setters>
-    </Style>
-
     <Style x:Key="SliderErrorStyle" TargetType="TextBox">
         <Style.Setters>
             <Setter Property="BorderBrush" Value="Red"/>
         </Style.Setters>
     </Style>
 
-    <Style x:Key="SliderIntStyle" TargetType="Slider">
+    <Style x:Key="SliderBaseStyle" TargetType="Slider">
         <Style.Setters>
             <Setter Property="TickPlacement" Value="BottomRight"/>
-            <Setter Property="TickFrequency" Value="1"/>
-            <Setter Property="Minimum" Value="0"/>
-            <Setter Property="Maximum" Value="100"/>
             <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
         </Style.Setters>
     </Style>
 
-    <Style x:Key="SliderFloatStyle" TargetType="Slider">
+    <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
         <Style.Setters>
-            <Setter Property="TickPlacement" Value="BottomRight"/>
-            <Setter Property="TickFrequency" Value="0.01"/>
-            <Setter Property="Minimum" Value="0"/>
-            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
             <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
         </Style.Setters>
     </Style>
 
@@ -259,5 +211,11 @@
         </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
 
+    <ObjectDataProvider x:Key="EquilType" MethodName="GetValues"
+                ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type Type="{x:Type enums:EqualizationType}"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
     <!--#endregion-->
 </ResourceDictionary>

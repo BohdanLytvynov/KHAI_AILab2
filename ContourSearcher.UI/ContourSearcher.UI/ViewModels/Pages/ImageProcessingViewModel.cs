@@ -1,13 +1,12 @@
 ﻿using ContourSearcher.UI.Constant;
-using ContourSearcher.UI.DataExchange;
 using ContourSearcher.UI.Enums;
-using ContourSearcher.UI.Helpers;
-using ContourSearcherBusinessLayer;
+using ContourSearcher.UI.PageManagers.Interfaces;
+using ContourSearcher.UI.Views.Pages.Modules;
 using CSharpBusinessLayer.Validators;
 using MVVMBase.Attributes;
 using MVVMBase.Commands;
 using MVVMBase.ViewModels;
-using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ContourSearcher.UI.ViewModels.Pages
@@ -15,97 +14,72 @@ namespace ContourSearcher.UI.ViewModels.Pages
     internal class ImageProcessingViewModel : ViewModelBase
     {
         #region Fields
+        private IPageManager m_pageManager;
+        private Page m_HistogramPage;
+        private Page m_EqualizerPage;
+        private Page m_FilterPage;
+        
+        //private bool m_useDynamicMode;
+        //private ICVSystem m_CVSystem;
 
-        private bool m_useDynamicMode;
-        private string m_SourceWindow;
+        #region Smoothing
 
-        private ObservableCollection<string> m_ActiveWindowNames;
         private SmoothingType m_SmoothingType;
 
-        //private string m_size1;
         private int m_size1;
         private int m_size2;
 
         private double m_sigma1;
         private double m_sigma2;
 
-        private ICVSystem m_CVSystem;
+        #endregion
+
         #endregion
 
         #region Properties
 
-        public ObservableCollection<string> ActiveWindows
-        { get => m_ActiveWindowNames; set => m_ActiveWindowNames = value; }
+        public Page HistogramPage { get => m_HistogramPage; set => Set(ref m_HistogramPage, value); }
 
-        public bool UseDynamicMode
-        { get => m_useDynamicMode; set => Set(ref m_useDynamicMode, value); }
+        public Page EqualizerPage { get=>m_EqualizerPage; set=>Set(ref m_EqualizerPage, value); }
 
-        public string ImgSourceForSmooth
-        {
-            get => m_SourceWindow;
-            set => SetToDefaultIfNull(ref m_SourceWindow, value, string.Empty);
-        }
+        public Page FilteringPage { get=> m_FilterPage; set => Set(ref m_FilterPage, value) ; }
+        //public bool UseDynamicMode
+        //{ get => m_useDynamicMode; set => Set(ref m_useDynamicMode, value); }
+
+        #region Smoothing
 
         public SmoothingType SmoothingType
         {
             get => m_SmoothingType;
-            set
-            {
-                Set(ref m_SmoothingType, value);
-
-                if (UseDynamicMode)
-                    SmoothImage();
-            }
+            set => Set(ref m_SmoothingType, value);
         }
 
         public int Size1
         {
             get => m_size1;
-            set
-            {
-                Set(ref m_size1, value);
-
-                if (UseDynamicMode)
-                    SmoothImage();
-            }
+            set => Set(ref m_size1, value);
         }
 
         public int Size2
         {
             get => m_size2;
-            set
-            {
-                Set(ref m_size2, value);
-
-                if (UseDynamicMode)
-                    SmoothImage();
-            }
+            set => Set(ref m_size2, value);
         }
 
         public double Sigma1
         {
             get => m_sigma1;
 
-            set
-            {
-                Set(ref m_sigma1, value);
-
-                if (UseDynamicMode)
-                    SmoothImage();
-            }
+            set => Set(ref m_sigma1, value);
         }
 
         public double Sigma2
         {
             get => m_sigma2;
-            set
-            {
-                Set(ref m_sigma2, value);
-
-                if (UseDynamicMode)
-                    SmoothImage();
-            }
+            set => Set(ref m_sigma2, value);
         }
+
+        #endregion
 
         #endregion
 
@@ -115,31 +89,29 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         public ICommand OnRefreshActiveWindowsPressed { get; }
 
-        #endregion
+        public ICommand OnCalculateHistogramPressed { get; }
 
+        #endregion
+        
         #region Ctor
-        public ImageProcessingViewModel(ICVSystem cVSystem) : this()
+        public ImageProcessingViewModel(IPageManager pageManager) : this()
         {
-            m_CVSystem = cVSystem;
+            m_pageManager = pageManager ?? throw new ArgumentNullException(nameof(pageManager));
+            m_HistogramPage = m_pageManager.GetPage(nameof(HistogramModule));
+            m_EqualizerPage = m_pageManager.GetPage(nameof(EqualizerModule));
+            m_FilterPage = m_pageManager.GetPage(nameof(FilteringModule));
         }
 
         public ImageProcessingViewModel()
         {
             InitValidArray(this);
-
-            m_ActiveWindowNames = new ObservableCollection<string>();
-            m_SourceWindow = string.Empty;
-            m_useDynamicMode = false;
+            
+            //m_useDynamicMode = false;
             m_SmoothingType = SmoothingType.CV_BLUR_NO_SCALE;
 
             OnSmoothImageButtonPressed = new Command(
                 OnSmoothButtonPressedExecute,
                 CanOnSmoothButtonPressedExecute
-                );
-
-            OnRefreshActiveWindowsPressed = new Command(
-                OnRefreshActiveButtonPressedExecute,
-                CanOnRefreshActiveWindowsButtonPressedExecute
                 );
         }
         #endregion
@@ -153,8 +125,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
             try
             {
-                m_CVSystem.SmoothImage(ImgSourceForSmooth, (int)SmoothingType, Size1, Size2, Sigma1, Sigma2);
-                m_CVSystem.DisplayImageInExistingWindow(ImgSourceForSmooth, ImgSourceForSmooth);
+                //m_CVSystem.SmoothImage(ImgNameForProcessing, (Int32)SmoothingType, Size1, Size2, Sigma1, Sigma2);
+                //m_CVSystem.DisplayImageInExistingWindow(ImgNameForProcessing, ImgNameForProcessing);
             }
             catch (Exception ex)
             {
@@ -167,8 +139,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
         #region On Smooth Button Pressed Execute
 
         private bool CanOnSmoothButtonPressedExecute(object p) =>
-            !UseDynamicMode
-            && CanSmooth();
+            CanSmooth();
 
         private void OnSmoothButtonPressedExecute(object p)
         {
@@ -176,27 +147,16 @@ namespace ContourSearcher.UI.ViewModels.Pages
         }
 
         #endregion
-
-        #region On Refresh Active Windows Pressed
-
-        private bool CanOnRefreshActiveWindowsButtonPressedExecute(object p) => true;
-
-        private void OnRefreshActiveButtonPressedExecute(object p)
-        {
-            var imgs = ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION);
-
-            UIHelper.RefreshObservableCollection(ActiveWindows, imgs);
-        }
-
-        #endregion
+        
+        
 
         private bool CanSmooth()
         {
             return Size1 > 0
                 && Size2 > 0
                 && Sigma1 > 0
-                && Sigma2 > 0
-                && !string.IsNullOrEmpty(ImgSourceForSmooth);
+                && Sigma2 > 0;
+                //&& !string.IsNullOrEmpty(ImgNameForProcessing);
         }
 
         #endregion

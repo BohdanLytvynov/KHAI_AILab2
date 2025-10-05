@@ -1,9 +1,4 @@
 ﻿using ContourSearcher.UI.PageManagers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ContourSearcher.UI.PageManagers
@@ -84,6 +79,13 @@ namespace ContourSearcher.UI.PageManagers
             {
                 m_OnPageChanged?.Invoke(this, new PageManagerEventArgs(page, frame));
             }            
+        }
+
+        public Page? GetPage(string name)
+        {
+            Page page = null;
+            m_pages.TryGetValue(name, out page);
+            return page;
         }
 
         #endregion

@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages"
       xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages"
-      xmlns:fa5="http://schemas.fontawesome.com/icons/"
       xmlns:custControls="clr-namespace:UserControls;assembly=UserControls"
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="800"
@@ -18,12 +17,21 @@
 
         <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel Orientation="Vertical" Height="700">
-                    
-                    <StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
+                <StackPanel Orientation="Vertical" Height="1200">
+
+                    <Frame Content="{Binding HistogramPage}" 
+                           NavigationUIVisibility="Hidden"/>
+
+                    <Frame Content="{Binding EqualizerPage}"
+                           NavigationUIVisibility="Hidden"/>
+
+                    <Frame Content="{Binding FilteringPage}"
+                           NavigationUIVisibility="Hidden"/>
+
+                    <!--<StackPanel Style="{StaticResource HorizontalStack}">
                         <Label Content="Choose source image for processing:" Style="{StaticResource InputTxtBoxLabel}"/>
                         <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedItem="{Binding ImgSourceForSmooth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                  SelectedItem="{Binding ImgNameForProcessing, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsPressed}"
                                 ToolTip="Press to update the list of Images that are loaded.">
                             <fa5:SvgAwesome Icon="Solid_RedoAlt" 
@@ -31,11 +39,11 @@
                                 Width="30"
                                 Foreground="#FF6B6B6B"/>
                         </Button>
-                    </StackPanel>
+                    </StackPanel>-->
 
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                    <!--<Rectangle Style="{StaticResource BorderRectStyle}"/>
                     <TextBlock Text="Image Smoothing: (Comming soon)" Style="{StaticResource DescLabel}"/>
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>-->
 
                     <!--<StackPanel Orientation="Horizontal" Style="{StaticResource HorizontalStack}">
                         <Label Style="{StaticResource InputTxtBoxLabel}" Content="Choose smoothing:"/>
@@ -92,15 +100,13 @@
                                 Style="{StaticResource SimpleButton}"/>
                     </Grid>-->
 
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                    <TextBlock Text="Histograms:" Style="{StaticResource DescLabel}"/>
+                    
+
+                   
+
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
-                    
-                    
-                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
-                    
-                    
+
                 </StackPanel>
             </ScrollViewer>
         </Border>

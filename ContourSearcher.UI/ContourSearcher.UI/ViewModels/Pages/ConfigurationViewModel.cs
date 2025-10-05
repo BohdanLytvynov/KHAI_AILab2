@@ -143,7 +143,7 @@ namespace ContourSearcher.UI.ViewModels.Pages
             m_LoadedImages = new ObservableCollection<string>();
             m_ActiveWindows = new ObservableCollection<string>();
 
-            m_imageToLoadType = ImageToLoadType.CV_LOAD_IMAGE_COLOR;
+            m_imageToLoadType = ImageToLoadType.IMREAD_COLOR;
 
             OnRefreshButtonPressed = new Command(
                 OnRefreshButtonPressedExecute,
@@ -151,8 +151,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
                 );
 
             OnDeleteButtonPressed = new Command(
-                OnDeleteButtonPressedExecute, 
-                CanOnDeleteButtonPressedExecute
+                OnDeleteImagePathButtonPressedExecute, 
+                CanOnDeleteImagePathButtonPressedExecute
                 );
 
             OnAddToImageProcessingPressed = new Command(
@@ -176,23 +176,15 @@ namespace ContourSearcher.UI.ViewModels.Pages
                     OnReleaseButtonPressedExecute,
                     CanOnReleaseButtonPressedExecute
                 );
-
-            ShareData.InsertItem(Constants.ACTIVE_WINDOW_LIST_COLLECTION, new List<string>());
         }
 
         #endregion
 
         #region Methods
 
-        private void RefreshLoadedImages()
-        {
-            var imgs = ShareData.GetItem<List<string>>(Constants.LOADED_IMAGE_LIST_COLLECTION);
-            UIHelper.RefreshObservableCollection(LoadedImages, imgs);
-        }
-
         private void RefreshActiveWindows()
         {
-            var imgs = ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION);
+            var imgs = m_cvSystem.GetActiveWindows();
             UIHelper.RefreshObservableCollection(ActiveWindows, imgs);
         }
 
@@ -207,7 +199,8 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         private void OnRefreshButtonPressedExecute(object p)
         {
-            RefreshLoadedImages();
+            var imgs = ShareData.GetItem<List<string>>(Constants.LOADED_IMAGE_LIST_COLLECTION);
+            UIHelper.RefreshObservableCollection(LoadedImages, imgs);
         }
 
         #endregion
@@ -225,14 +218,13 @@ namespace ContourSearcher.UI.ViewModels.Pages
 
         #region On Delete Button Pressed Execute
 
-        private bool CanOnDeleteButtonPressedExecute(object p) => 
+        private bool CanOnDeleteImagePathButtonPressedExecute(object p) => 
             !string.IsNullOrEmpty(ChosenImagePath);
 
-        private void OnDeleteButtonPressedExecute(object p)
+        private void OnDeleteImagePathButtonPressedExecute(object p)
         {
             var imgs = ShareData.GetItem<List<string>>(Constants.LOADED_IMAGE_LIST_COLLECTION);
             imgs.Remove(ChosenImagePath);
-
             RefreshLoadedImages(imgs);
         }
 
@@ -246,12 +238,9 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             try
             {
-                var list = ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION);
-                list.Add(ImageLoadingWindowName);
-                ActiveWindows.Add(ImageLoadingWindowName);
-
                 m_cvSystem.LoadToOpenCV(ChosenImagePath, ImageLoadingWindowName, (Int32)ImageToLoadType);
                 m_cvSystem.DisplayImageInWindow(ImageLoadingWindowName, ImageLoadingWindowName);
+                OnRefreshActiveWindowsButtonPressedExecute(null);
             }
             catch (Exception ex)
             {
@@ -271,13 +260,9 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             try
             {
-                string name = ImageForReleaseName;
-                var windows = ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION);
-                windows.Remove(ImageForReleaseName);
-                UIHelper.RefreshObservableCollection(ActiveWindows, windows);
-
-                m_cvSystem.FreeImage(name);
-                m_cvSystem.DestroyWindow(name);
+                m_cvSystem.FreeImage(ImageForReleaseName);
+                m_cvSystem.DestroyWindow(ImageForReleaseName);
+                OnRefreshActiveWindowsButtonPressedExecute(null);
             }
             catch (Exception)
             {
@@ -297,11 +282,9 @@ namespace ContourSearcher.UI.ViewModels.Pages
         {
             try
             {
-                ShareData.GetItem<List<string>>(Constants.ACTIVE_WINDOW_LIST_COLLECTION).Add(CloneImageName);
-                ActiveWindows.Add(CloneImageName);
-
                 m_cvSystem.CloneImage(SelectedSourceWindow, CloneImageName);
                 m_cvSystem.DisplayImageInWindow(CloneImageName, CloneImageName);
+                OnRefreshActiveWindowsButtonPressedExecute(null);
             }
             catch (Exception ex)
             {

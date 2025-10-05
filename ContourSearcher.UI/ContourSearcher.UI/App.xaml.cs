@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MVVMBase.ViewModels;
 using ServiceWrapperLib;
 using ContourSearcherBusinessLayer;
+using ContourSearcher.UI.ViewModels.Pages.Modules;
+using ContourSearcher.UI.Views.Pages.Modules;
 
 namespace ContourSearcher.UI
 {
@@ -35,6 +37,9 @@ namespace ContourSearcher.UI
                 c.AddSingleton<ImageProcessingViewModel>();
                 c.AddSingleton<ContourSearcherViewModel>();
                 c.AddSingleton<ConfigurationViewModel>();
+                c.AddSingleton<HistogramModuleViewModel>();
+                c.AddSingleton<EqualizerModuleViewModel>();
+                c.AddSingleton<FilteringModuleViewModel>();
 
                 //Add Views
                 c.AddTransient(p =>
@@ -56,13 +61,14 @@ namespace ContourSearcher.UI
                     return view;
                 });
 
+                //Add Pages
                 c.AddSingleton<LoadImagePage>();
-
                 c.AddSingleton<ImageProcessingPage>();
-
                 c.AddSingleton<ContourSearcherPage>();
-
                 c.AddSingleton<ConfigurationPage>();
+                c.AddSingleton<HistogramModule>();
+                c.AddSingleton<EqualizerModule>();
+                c.AddSingleton<FilteringModule>();
             });
 
             var provider = ServiceWrapper.ServiceProvider;
@@ -70,6 +76,12 @@ namespace ContourSearcher.UI
             var mainWindow = provider.GetRequiredService<MainWindow>();
             var pm = provider.GetRequiredService<IPageManager>();
 
+            //1 Modules Configuration we need it first to be sure, that it will be present in PM during the initialization
+            ConfigureVM(typeof(HistogramModule), typeof(HistogramModuleViewModel), pm, provider);
+            ConfigureVM(typeof(EqualizerModule), typeof(EqualizerModuleViewModel), pm, provider);
+            ConfigureVM(typeof(FilteringModule), typeof(FilteringModuleViewModel), pm, provider);
+
+            //2 Pages Configuration
             ConfigureVM(typeof(LoadImagePage), typeof(LoadImagePageViewModel), pm, provider);
             ConfigureVM(typeof(ImageProcessingPage), typeof(ImageProcessingViewModel), pm, provider);
             ConfigureVM(typeof(ContourSearcherPage), typeof(ContourSearcherViewModel), pm, provider);
