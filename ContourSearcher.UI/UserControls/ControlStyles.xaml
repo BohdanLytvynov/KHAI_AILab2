@@ -51,4 +51,5 @@
             <Setter Property="ItemsControl.FontSize" Value="14"/>
         </Style.Setters>
     </Style>
+
 </ResourceDictionary>
