@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="UserControls.MatrixPresenter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UserControls"
+             mc:Ignorable="d" 
+             
+             d:DataContext="{d:DesignInstance local:MatrixPresenter, IsDesignTimeCreatable=True}"
+             x:Name="Control" SizeChanged="Control_SizeChanged">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=Control}">
+        <Border Style="{StaticResource MainBorderStyle}" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Label Grid.Column="1" Content="Rows:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox Grid.Column="3" Style="{StaticResource TxtBoxInputStyle}" MinWidth="50">
+                        <TextBox.Text>
+                            <Binding Path="RowsString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Label Grid.Column="5" Content="Columns:"/>
+                    <TextBox Grid.Column="7" Style="{StaticResource TxtBoxInputStyle}" MinWidth="50">
+                        <TextBox.Text>
+                            <Binding Path="ColumnsString" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Margin="10" x:Name="Content">
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

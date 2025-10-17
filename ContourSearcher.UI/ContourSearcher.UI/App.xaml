@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ContourSearcher.UI;component/Resources/CommonStyles.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/UserControls;component/ControlStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ContourSearcher.UI;component/Resources/DataTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

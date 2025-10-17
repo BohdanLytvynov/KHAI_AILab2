@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:fVM="clr-namespace:ContourSearcher.UI.ViewModels.Models"
+                    xmlns:controls="clr-namespace:UserControls;assembly=UserControls"
+                    >
+
+    <!--#region FilterViewModel -->
+
+    <DataTemplate DataType="{x:Type fVM:FilterViewModel}">
+        <Border Style="{StaticResource Border}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+                <controls:MatrixPresenter Matrix="{Binding Kernel, UpdateSourceTrigger=PropertyChanged}"
+                                          MinWidth="250"
+                                          RowHeight="40.0" CallGetValueFunction="{Binding CallGetMatrix, 
+                    UpdateSourceTrigger=PropertyChanged}"
+                                          GetMatrixFunction="{Binding GetMatrixFunction, UpdateSourceTrigger=PropertyChanged}"
+                                          Valid="{Binding IsValid, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                          />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <!--#endregion-->
+
+</ResourceDictionary>
