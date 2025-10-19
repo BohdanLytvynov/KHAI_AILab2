@@ -1,7 +1,8 @@
 ﻿using ContourSearcher.UI.Constant;
-using ContourSearcher.UI.ViewModels.Models;
+using ContourSearcher.UI.ViewModels.Models.Filters;
 using ContourSearcher.UI.ViewModels.Pages.Modules.Base;
 using ContourSearcherBusinessLayer;
+using CSharpBusinessLayer.Validators;
 using MVVMBase.Commands;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,38 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
     {
         #region Fields
         private ObservableCollection<FilterViewModel> m_filters;
+
+        private string m_FilteringWindowName;
         #endregion
 
         #region Properties
         public ObservableCollection<FilterViewModel> Filters 
         { get => m_filters; set => Set(ref m_filters, value); }
+
+        public string FilteringWindowName 
+        {
+            get=> m_FilteringWindowName; 
+            set=> Set(ref m_FilteringWindowName, value);
+        }
+        #endregion
+
+        #region IData Error
+
+        public override string this[string columnName]
+        {
+            get
+            {
+                string error = string.Empty;
+                switch (columnName)
+                {
+                    case nameof(FilteringWindowName):
+                        SetValidArrayValue(0, ValidationHelper.ValidateEmptyText(FilteringWindowName, out error));
+                        break;
+                }
+                return error;
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -39,6 +67,7 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
             #region Init Fields
             ModuleName = Constants.Filtering.Name;
             m_filters = new ObservableCollection<FilterViewModel>();
+            m_FilteringWindowName = Constants.DEFAULT_INPUT_VALUE;
             #endregion
 
             #region Init Commands

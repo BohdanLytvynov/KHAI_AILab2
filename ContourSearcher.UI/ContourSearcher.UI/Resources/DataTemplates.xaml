@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:fVM="clr-namespace:ContourSearcher.UI.ViewModels.Models"
+                    xmlns:fVM="clr-namespace:ContourSearcher.UI.ViewModels.Models.Filters"
                     xmlns:controls="clr-namespace:UserControls;assembly=UserControls"
                     >
 
     <!--#region FilterViewModel -->
 
-    <DataTemplate DataType="{x:Type fVM:FilterViewModel}">
+    <DataTemplate DataType="{x:Type fVM:AveragingFilterViewModel}">
         <Border Style="{StaticResource Border}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
@@ -17,6 +17,7 @@
                                           GetMatrixFunction="{Binding GetMatrixFunction, UpdateSourceTrigger=PropertyChanged}"
                                           Valid="{Binding IsValid, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                           />
+                
             </StackPanel>
         </Border>
     </DataTemplate>

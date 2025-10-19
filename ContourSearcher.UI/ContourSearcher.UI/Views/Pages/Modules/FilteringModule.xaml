@@ -30,9 +30,25 @@ Foreground="#FF6B6B6B"/>
                 </Button>
             </StackPanel>
 
+            <StackPanel Style="{StaticResource HorizontalStack}">
+                <Label Content="Enter window name to display result:" Style="{StaticResource InputTxtBoxLabel}"/>
+                <TextBox Style="{StaticResource TxtBoxInputStyle}">
+                    <TextBox.Text>
+                        <Binding Path="FilteringWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" Margin="5">
+                <ComboBox MinWidth="150" Margin="0,0,5,0" ItemsSource="{Binding Source={StaticResource FilterType}}"/>
                 <Button Content="Add Filter"
                         Command="{Binding OnAddFilterButtonPressed}"/>
+                <Button Content="Apply All" Margin="5,0"/>
+                <CheckBox Content="Show Filtering Progress:" Style="{StaticResource CheckBoxStyle}"/>
             </StackPanel>
             <ScrollViewer VerticalScrollBarVisibility="Visible">
                 <ListView Height="800" ItemsSource="{Binding Filters, 

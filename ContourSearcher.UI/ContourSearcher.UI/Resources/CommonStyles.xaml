@@ -217,5 +217,12 @@
             <x:Type Type="{x:Type enums:EqualizationType}"/>
         </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
+    
+    <ObjectDataProvider x:Key="FilterType" MethodName="GetValues"
+            ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type Type="{x:Type enums:FilterTypes}"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
     <!--#endregion-->
 </ResourceDictionary>

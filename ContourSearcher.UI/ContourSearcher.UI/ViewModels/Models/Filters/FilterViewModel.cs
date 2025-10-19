@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Mat = UserControls.Math.Matrix<double>;
 
-namespace ContourSearcher.UI.ViewModels.Models
+namespace ContourSearcher.UI.ViewModels.Models.Filters
 {
-    internal class FilterViewModel : ViewModelBase
+    internal abstract class FilterViewModel : ViewModelBase
     {
         #region Fields
         private int m_showNumber;
@@ -20,34 +20,34 @@ namespace ContourSearcher.UI.ViewModels.Models
         #endregion
 
         #region Properties
-        public bool CallGetMatrix 
-        { 
-            get=> m_callGetMatrix;
-            set=> Set(ref m_callGetMatrix, value);
-        }
-
-        public Action<Mat> GetMatrixFunction 
-        { 
-            get=> m_getMatrix;
-            set=> Set(ref m_getMatrix, value);
-        }
-
-        public Mat Kernel 
+        public bool CallGetMatrix
         {
-            get=>m_kernel;
-            set=> Set(ref m_kernel, value);
+            get => m_callGetMatrix;
+            set => Set(ref m_callGetMatrix, value);
+        }
+
+        public Action<Mat> GetMatrixFunction
+        {
+            get => m_getMatrix;
+            set => Set(ref m_getMatrix, value);
+        }
+
+        public Mat Kernel
+        {
+            get => m_kernel;
+            set => Set(ref m_kernel, value);
         }
 
         public int ShowNumber
-        { 
-            get=> m_showNumber;
-            set=> Set(ref m_showNumber, value);
+        {
+            get => m_showNumber;
+            set => Set(ref m_showNumber, value);
         }
 
-        public bool IsValid 
+        public bool IsValid
         {
-            get=> m_isValid;
-            set=> Set(ref m_isValid, value);
+            get => m_isValid;
+            set => Set(ref m_isValid, value);
         }
         #endregion
 
@@ -56,22 +56,33 @@ namespace ContourSearcher.UI.ViewModels.Models
         {
             #region Init Fields
             m_showNumber = showNumber;
-            m_kernel = new Mat(3,3,0);
-            m_getMatrix = new Action<Mat>(GetMatrix);
+            Init();
             #endregion
+        }
+
+        public FilterViewModel()
+        {
+            m_showNumber = 0;
+            Init();
         }
         #endregion
 
         #region Methods
         private void GetMatrix(Mat matrix)
-        {   
-            this.Kernel = matrix;
+        {
+            Kernel = matrix;
         }
 
         public Mat GetMatrix()
-        { 
+        {
             CallGetMatrix = !CallGetMatrix;
             return Kernel;
+        }
+
+        private void Init()
+        {
+            m_kernel = new Mat(3, 3, 0);
+            m_getMatrix = new Action<Mat>(GetMatrix);
         }
         #endregion
     }
