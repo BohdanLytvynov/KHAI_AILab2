@@ -39,6 +39,20 @@ namespace ContourSearcherBusinessLayer {
 		void CLAHE_Equalize(String^ SrcImg, String^ EqualizeResultName, Double clipLimit, Int32 tileWidth, Int32 tileHeight);
 		void Separate_Equalize(String^ SrcImg, String^ EqualizeResultName);
 		void YCrCb_Equalize(String^ SrcImg, String^ EqualizeResultName);
+
+		void AverageImage(String^ SrcImg, String^ AveragingResultName,
+			Int32 dataType, Int32 kernelRows, Int32 kernelColumns, 
+			Int32 anchorX, Int32 anchorY, bool normalize, Int32 borderTye);
+		void Blur(String^ SrcImg, String^ BluringResultName, Int32 kernelRows, Int32 kernelColumns,
+			Int32 anchorX, Int32 anchorY, Int32 borderType);
+		void GaussianBlur(String^ SrcImg, String^ GaussianBlurResultName, Int32 kernelRows, Int32 kernelColumns,
+			Double sig1, Double sig2, Int32 borderType);
+		void CustomFilter(String^ SrcImg, String^ CustomFilterResultName,
+			List<List<Double>^>^ kernel, Int32 depth, Int32 anchorX, Int32 anchorY, Double delta,
+			Int32 borderType);
+		void BilateralFilter(String^ SrcImg, String^ BilateralFilterResultName,
+			Int32 d, Double sigmaColor, Double sigmaSpace, Int32 borderType);
+		
 		List<String^>^ GetActiveWindows();
 	};
 
@@ -73,7 +87,9 @@ namespace ContourSearcherBusinessLayer {
 			int lineType,
 			int offset);
 
+		void BuildKernel(cv::Mat* res, List<List<Double>^>^ matrix);
 		std::string ChannelIndexToString(int index);
+		void UpdateImageStorage(std::string imgName, cv::Mat img);
 
 #pragma endregion
 
@@ -111,8 +127,21 @@ namespace ContourSearcherBusinessLayer {
 
 		virtual void Simple_Equalize(String^ SrcImg, String^ EqualizeResultName) override;
 		virtual void CLAHE_Equalize(String^ SrcImg, String^ EqualizeResultName, Double clipLimit, Int32 tileWidth, Int32 tileHeight) override;
-		virtual void Separate_Equalize(String^ SrcImg, String^ EqualizeResultName);
-		virtual void YCrCb_Equalize(String^ SrcImg, String^ EqualizeResultName);
+		virtual void Separate_Equalize(String^ SrcImg, String^ EqualizeResultName) override;
+		virtual void YCrCb_Equalize(String^ SrcImg, String^ EqualizeResultName) override;
+		virtual void AverageImage(String^ SrcImg, String^ AveragingResultName,
+			Int32 dataType, Int32 kernelRows, Int32 kernelColumns,
+			Int32 anchorX, Int32 anchorY, bool normalize, Int32 borderTye) override;
+		virtual void Blur(String^ SrcImg, String^ BluringResultName, Int32 kernelRows, Int32 kernelColumns,
+			Int32 anchorX, Int32 anchorY, Int32 borderType) override;
+		virtual void GaussianBlur(String^ SrcImg, String^ GaussianBlurResultName, Int32 kernelRows, Int32 kernelColumns,
+			Double sig1, Double sig2, Int32 borderType) override;
+		virtual void CustomFilter(String^ SrcImg, String^ CustomFilterResultName, 
+			List<List<Double>^>^ kernel, Int32 depth, Int32 anchorX, Int32 anchorY, Double delta,
+			Int32 borderType) override;
+		virtual void BilateralFilter(String^ SrcImg, String^ BilateralFilterResultName, 
+			Int32 d, Double sigmaColor, Double sigmaSpace, Int32 borderType) override;
+
 		virtual List<String^>^ GetActiveWindows() override;
 #pragma endregion
 	};

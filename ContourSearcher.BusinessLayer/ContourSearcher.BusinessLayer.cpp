@@ -159,7 +159,6 @@ void ContourSearcherBusinessLayer::OpenCV::DisplayImageInExistingWindow(String^ 
 		std::string existingWindow_str = MarshalManagedString(existingWindow);
 
 		auto img = m_ImageNameMap->find(imgToDisplay_str);
-		cv::namedWindow(existingWindow_str, CV_WINDOW_AUTOSIZE);
 		cv::imshow(existingWindow_str.c_str(), img->second);
 		cv::waitKey(0);
 	}
@@ -285,6 +284,22 @@ void ContourSearcherBusinessLayer::OpenCV::plotLineHistogram(
 	}
 }
 
+void ContourSearcherBusinessLayer::OpenCV::BuildKernel(cv::Mat* res, List<List<Double>^>^ matrix)
+{
+	cv::Mat m(matrix->Count, matrix[0]->Count, CV_8UC1);
+
+	for (int i = 0; i < matrix->Count; i++)
+	{
+		uchar* image_row = m.ptr<uchar>(i);
+		for (int j = 0; j < matrix[i]->Count; j++)
+		{
+			image_row[j] = matrix[i][j];
+		}
+	}
+
+	*res = m;
+}
+
 std::string ContourSearcherBusinessLayer::OpenCV::ChannelIndexToString(int index)
 {
 	switch (index)
@@ -299,6 +314,27 @@ std::string ContourSearcherBusinessLayer::OpenCV::ChannelIndexToString(int index
 			return "Alpha";
 		default:
 			return "Not supported Channel!";
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::UpdateImageStorage(std::string imgName, cv::Mat img)
+{
+	auto res = m_ImageNameMap->find(imgName);
+
+	if (m_ImageNameMap->empty())
+	{
+		m_ImageNameMap->insert(std::pair<std::string, cv::Mat>(imgName, img));
+		return;
+	}
+
+	if (res == m_ImageNameMap->end())
+	{
+		m_ImageNameMap->insert(std::pair<std::string, cv::Mat>(imgName, img));
+		return;
+	}
+	else
+	{
+		m_ImageNameMap->at(imgName) = img;
 	}
 }
 
@@ -505,8 +541,102 @@ void ContourSearcherBusinessLayer::OpenCV::YCrCb_Equalize(String^ SrcImg, String
 	}
 }
 
+void ContourSearcherBusinessLayer::OpenCV::AverageImage(String^ SrcImg, String^ AveragingResultName,
+	Int32 dataType, Int32 kernelRows, Int32 kernelColumns, Int32 anchorX, Int32 anchorY, bool normalize, Int32 borderTye)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(SrcImg);
+	string resultName = MarshalManagedString(AveragingResultName);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat output;
+		boxFilter(srcImg, output, dataType, cv::Size(kernelColumns, kernelRows), cv::Point(anchorX, anchorY), normalize, borderTye);		
+		UpdateImageStorage(resultName, output);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::Blur(String^ SrcImg, String^ BluringResultName, Int32 kernelRows, Int32 kernelColumns, Int32 anchorX, Int32 anchorY, Int32 borderType)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(SrcImg);
+	string resultName = MarshalManagedString(BluringResultName);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat output;
+		blur(srcImg, output, cv::Size(kernelColumns, kernelRows), cv::Point(anchorX, anchorY), borderType);		
+		UpdateImageStorage(resultName, output);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::GaussianBlur(String^ SrcImg, String^ GaussianBlurResultName, Int32 kernelRows, Int32 kernelColumns, Double sig1, Double sig2, Int32 borderType)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(SrcImg);
+	string resultName = MarshalManagedString(GaussianBlurResultName);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat output;
+		cv::GaussianBlur(srcImg, output, cv::Size(kernelColumns, kernelRows), sig1, sig2, borderType);
+		UpdateImageStorage(resultName, output);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::CustomFilter(String^ SrcImg, String^ CustomFilterResultName,
+	List<List<Double>^>^ kernel, Int32 depth, Int32 anchorX, Int32 anchorY, Double delta,
+	Int32 borderType)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(SrcImg);
+	string resultName = MarshalManagedString(CustomFilterResultName);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat output;
+		Mat filterKernel;
+		BuildKernel(&filterKernel, kernel);
+		cv:filter2D(srcImg, output, depth, filterKernel, cv::Point(anchorX, anchorY), delta, borderType);
+		UpdateImageStorage(resultName, output);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::BilateralFilter(String^ SrcImg, String^ BilateralFilterResultName,
+	Int32 d, Double sigmaColor, Double sigmaSpace, Int32 borderType)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(SrcImg);
+	string resultName = MarshalManagedString(BilateralFilterResultName);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat output;		
+		bilateralFilter(srcImg, output, d, sigmaColor, sigmaSpace, borderType);
+		UpdateImageStorage(resultName, output);
+	}
+}
+
 List<String^>^ ContourSearcherBusinessLayer::OpenCV::GetActiveWindows()
 {
+	if (m_disposed)
+		return gcnew List<String^>();
+
 	auto ImageNameMap = *m_ImageNameMap;	
 
 	List<String^>^ result = gcnew List<String^>();

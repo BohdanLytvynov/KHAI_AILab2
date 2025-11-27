@@ -29,6 +29,8 @@ namespace UserControls
 
         private bool m_ValueFlow;
         private bool m_TextBoxFlow;
+
+        private bool m_GetValueFuncCalled;
         #endregion
 
         #region Properties
@@ -195,6 +197,7 @@ namespace UserControls
             m_RowsString = string.Empty;
             m_ValueFlow = false;
             m_TextBoxFlow = false;
+            m_GetValueFuncCalled = false;
         }
 
         #endregion
@@ -271,12 +274,12 @@ namespace UserControls
         {
             var This = (MatrixPresenter)d;
             var v = (bool)e.NewValue;
-            if (This.CallGetValueFunction != v)
+            if (This.m_GetValueFuncCalled != v)
             {
                 var res = GetMatrix(This.Content);
 
                 This.GetMatrixFunction?.Invoke(res);
-                This.CallGetValueFunction = v;
+                This.m_GetValueFuncCalled = v;
             }
         }
 
