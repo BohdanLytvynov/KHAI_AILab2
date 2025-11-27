@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ContourSearcher.UI": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -1,0 +1,152 @@
+﻿<Page x:Class="ContourSearcher.UI.Views.Pages.ConfigurationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages"
+      xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance vm:ConfigurationViewModel, IsDesignTimeCreatable=True}"
+      Background="White">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Visible">
+            <StackPanel Orientation="Vertical" Height="800">
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="Image Loading:" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Enter window name:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="ImageLoadingWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose Image:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding LoadedImages, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding ChosenImagePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <Button Margin="20,0,0,0" Command="{Binding OnRefreshButtonPressed}"
+                            ToolTip="Press to update the list of Images that are loaded.">
+                        <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+                                    Height="20"
+                                    Width="30"
+                                    Foreground="#FF6B6B6B">
+                        </fa5:SvgAwesome>
+                    </Button>
+                    
+                    <Button Margin="20,0,0,0" Command="{Binding OnDeleteButtonPressed}"
+                            ToolTip="Press to delete the selected Image.">
+                        <fa5:SvgAwesome Icon="Solid_Trash" 
+                            Height="20"
+                            Width="30"
+                            Foreground="#FF6B6B6B">
+                        </fa5:SvgAwesome>
+                    </Button>
+                </StackPanel>
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose Image Loading Mode:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource ImageTypeEnum}}"
+                  SelectedItem="{Binding ImageToLoadType, 
+            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="155"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" 
+                Content="Load to Pipeline"
+                Command="{Binding OnAddToImageProcessingPressed}"
+            Style="{StaticResource SimpleButton}"/>
+                </Grid>
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="Image Releasing:" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose image for release:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding ImageForReleaseName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    />
+                    <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsButtonPressed}"
+                        ToolTip="Press to update the list of Images that are loaded.">
+                        <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+                        Height="20"
+                        Width="30"
+                        Foreground="#FF6B6B6B">
+                        </fa5:SvgAwesome>
+                    </Button>
+                </StackPanel>
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" 
+        Content="Release"
+        Command="{Binding OnReleaseImageButtonPressed}"
+        Style="{StaticResource SimpleButton}"/>
+                </Grid>
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="Image Cloning:" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose source image:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedSourceWindow, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    />
+                    <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsButtonPressed}"
+        ToolTip="Press to update the list of Images that are loaded.">
+                        <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+                Height="20"
+                Width="30"
+                Foreground="#FF6B6B6B">
+                        </fa5:SvgAwesome>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Enter destination window/image name:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="CloneImageName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" 
+                        Content="Clone Image"
+                        Command="{Binding OnCloneImageButtonPressed}"
+                        Style="{StaticResource SimpleButton}"/>
+                </Grid>
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

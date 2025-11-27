@@ -8,12 +8,43 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)IBin\DLL\$(Configuration)\ContourSearcher.BLL.dll&quot; &quot;$(SolutionDir)$(OutDir)&quot;" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="FontAwesome5" Version="2.1.11" />
+  </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ContourSearcher.BLL\ContourSearcher.BLL\ContourSearcher.BLL.vcxproj" />
+    <ProjectReference Include="..\..\ContourSearcher.BLL\CSharpBusinessLayer\CSharpBusinessLayer.csproj" />
+    <ProjectReference Include="..\..\ContourSearcher.BusinessLayer\ContourSearcher.BusinessLayer.vcxproj" />
+    <ProjectReference Include="..\..\ServiceWrapperLib\ServiceWrapperLib.csproj" />
+    <ProjectReference Include="..\MVVMBase\MVVMBase.csproj" />
+    <ProjectReference Include="..\UserControls\UserControls.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>
