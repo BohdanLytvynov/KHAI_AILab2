@@ -2,24 +2,475 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:fVM="clr-namespace:ContourSearcher.UI.ViewModels.Models.Filters"
                     xmlns:controls="clr-namespace:UserControls;assembly=UserControls"
+                    xmlns:custControls="clr-namespace:UserControls;assembly=UserControls"
                     >
+
+    <Duration x:Key="AnimDuration">0:0:0.02
+    </Duration>
 
     <!--#region FilterViewModel -->
 
-    <DataTemplate DataType="{x:Type fVM:AveragingFilterViewModel}">
-        <Border Style="{StaticResource Border}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
-                <controls:MatrixPresenter Matrix="{Binding Kernel, UpdateSourceTrigger=PropertyChanged}"
+    <DataTemplate DataType="{x:Type fVM:CustomFilterViewModel}">
+        <Border Style="{StaticResource Border}" 
+                Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+            AncestorType=ListView}, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}"
+                >
+            <Border.BorderBrush>
+                <SolidColorBrush x:Name="brdBrush" Color="Black"/>
+            </Border.BorderBrush>
+            <StackPanel Orientation="Vertical">
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="{Binding FilterName}" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+                    <controls:MatrixPresenter Matrix="{Binding Kernel, UpdateSourceTrigger=PropertyChanged}"
                                           MinWidth="250"
                                           RowHeight="40.0" CallGetValueFunction="{Binding CallGetMatrix, 
                     UpdateSourceTrigger=PropertyChanged}"
                                           GetMatrixFunction="{Binding GetMatrixFunction, UpdateSourceTrigger=PropertyChanged}"
                                           Valid="{Binding IsValid, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                           />
-                
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Anchor X:"
+Margin="20" Value="{Binding AnchorX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="-1" Maximum="100"/>
+
+                        <custControls:Slider LabelText="Anchor Y:"
+Margin="20" Value="{Binding AnchorY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="-1" Maximum="100"/>
+                        
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Delta:"
+Margin="20" Value="{Binding Delta, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource FloatSlider}"
+Minimum="-100" Maximum="100"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Depth:"
+                             Margin="10,0,0,0"/>
+                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource NumberDataType}}"
+                            SelectedItem="{Binding Depth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            Margin="10,0,0,0"/>
+
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Border type:"
+ Margin="10,0,0,0"/>
+                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"
+SelectedItem="{Binding BorderType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+Margin="10,0,0,0"
+                            />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                            <Button Content="Apply Filter" Style="{StaticResource SimpleButton}"
+                          Margin="10,0"
+                          Command="{Binding OnApplyButtonPressed}"
+                          />
+                            <Button Content="Remove Filter" Style="{StaticResource SimpleButton}"
+                          Command="{Binding OnDeleteButtonPressed}"
+                          />
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
             </StackPanel>
         </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="OrangeRed" From="Black"
+                                            Storyboard.TargetName="brdBrush"
+                                            Storyboard.TargetProperty="Color"
+                                            Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                To="Black" From="OrangeRed"
+                                Storyboard.TargetName="brdBrush"
+                                Storyboard.TargetProperty="Color"
+                                Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type fVM:AveragingFilterViewModel}">
+        <Border Style="{StaticResource Border}"
+                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+AncestorType=ListView}, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}">
+            <Border.BorderBrush>
+                <SolidColorBrush x:Name="brdBrush" Color="Black"/>
+            </Border.BorderBrush>
+            <StackPanel Orientation="Vertical">
+                
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="{Binding FilterName}" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Kernel Rows:"
+     Margin="20" Value="{Binding KernelRows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+     SliderStyle="{StaticResource IntSlider}"
+     Minimum="3" Maximum="100"
+     />
+                        <custControls:Slider LabelText="Kernel Columns:"
+Margin="20" Value="{Binding KernelColumns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="3" Maximum="100"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Anchor X:"
+Margin="20" Value="{Binding AnchorX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="-1" Maximum="100"/>
+
+                        <custControls:Slider LabelText="Anchor Y:"
+Margin="20" Value="{Binding AnchorY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="-1" Maximum="100"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <CheckBox Style="{StaticResource CheckBoxStyle}" Content="Normalize"
+                                      IsChecked="{Binding Normalize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Depth:"
+                                       Margin="10,0,0,0"/>
+                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource NumberDataType}}"
+                                      SelectedItem="{Binding Depth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      Margin="10,0,0,0"/>
+
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Border type:"
+           Margin="10,0,0,0"/>
+                                <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"
+          SelectedItem="{Binding BorderType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+          Margin="10,0,0,0"
+                                      />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                            <Button Content="Apply Filter" Style="{StaticResource SimpleButton}"
+                                    Margin="10,0"
+                                    Command="{Binding OnApplyButtonPressed}"
+                                    />
+                            <Button Content="Remove Filter" Style="{StaticResource SimpleButton}"
+                                    Command="{Binding OnDeleteButtonPressed}"
+                                    />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="OrangeRed" From="Black"
+                                    Storyboard.TargetName="brdBrush"
+                                    Storyboard.TargetProperty="Color"
+                                    Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                        To="Black" From="OrangeRed"
+                        Storyboard.TargetName="brdBrush"
+                        Storyboard.TargetProperty="Color"
+                        Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type fVM:SimpleBlurViewModel}">
+        <Border Style="{StaticResource Border}"
+                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+AncestorType=ListView}, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}">
+            <Border.BorderBrush>
+                <SolidColorBrush x:Name="brdBrush" Color="Black"/>
+            </Border.BorderBrush>
+            <StackPanel Orientation="Vertical">
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="{Binding FilterName}" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Kernel Rows:"
+     Margin="20" Value="{Binding KernelRows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+     SliderStyle="{StaticResource IntSlider}"
+     Minimum="3" Maximum="100"
+     />
+                        <custControls:Slider LabelText="Kernel Columns:"
+Margin="20" Value="{Binding KernelColumns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="3" Maximum="100"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Anchor X:"
+Margin="20" Value="{Binding AnchorX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="-1" Maximum="100"/>
+
+                        <custControls:Slider LabelText="Anchor Y:"
+Margin="20" Value="{Binding AnchorY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="-1" Maximum="100"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Border type:"
+           Margin="10,0,0,0"/>
+                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"
+          SelectedItem="{Binding BorderType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+          Margin="10,0,0,0"
+                                      />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                            <Button Content="Apply Filter" Style="{StaticResource SimpleButton}"
+                                    Margin="10,0"
+                                    Command="{Binding OnApplyButtonPressed}"
+                                    />
+                            <Button Content="Remove Filter" Style="{StaticResource SimpleButton}"
+                                    Command="{Binding OnDeleteButtonPressed}"
+                                    />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="OrangeRed" From="Black"
+                                    Storyboard.TargetName="brdBrush"
+                                    Storyboard.TargetProperty="Color"
+                                    Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                        To="Black" From="OrangeRed"
+                        Storyboard.TargetName="brdBrush"
+                        Storyboard.TargetProperty="Color"
+                        Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type fVM:GaussianFilterViewModel}">
+        <Border Style="{StaticResource Border}"
+                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+AncestorType=ListView}, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}">
+            <Border.BorderBrush>
+                <SolidColorBrush x:Name="brdBrush" Color="Black"/>
+            </Border.BorderBrush>
+            <StackPanel Orientation="Vertical">
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="{Binding FilterName}" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Kernel Rows:"
+     Margin="20" Value="{Binding KernelRows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+     SliderStyle="{StaticResource IntSlider}"
+     Minimum="3" Maximum="100"
+     />
+                        <custControls:Slider LabelText="Kernel Columns:"
+Margin="20" Value="{Binding KernelColumns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource IntSlider}"
+Minimum="3" Maximum="100"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Sigma 1:"
+Margin="20" Value="{Binding Sigma1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource FloatSlider}"
+Minimum="1" Maximum="100"/>
+
+                        <custControls:Slider LabelText="Sigma 2:"
+Margin="20" Value="{Binding Sigma2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource FloatSlider}"
+Minimum="1" Maximum="100"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Border type:"
+           Margin="10,0,0,0"/>
+                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"
+          SelectedItem="{Binding BorderType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+          Margin="10,0,0,0"
+                                      />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                            <Button Content="Apply Filter" Style="{StaticResource SimpleButton}"
+                                    Margin="10,0"
+                                    Command="{Binding OnApplyButtonPressed}"
+                                    />
+                            <Button Content="Remove Filter" Style="{StaticResource SimpleButton}"
+                                    Command="{Binding OnDeleteButtonPressed}"
+                                    />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="OrangeRed" From="Black"
+                                    Storyboard.TargetName="brdBrush"
+                                    Storyboard.TargetProperty="Color"
+                                    Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                        To="Black" From="OrangeRed"
+                        Storyboard.TargetName="brdBrush"
+                        Storyboard.TargetProperty="Color"
+                        Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type fVM:BilateralFilterViewModel}">
+        <Border Style="{StaticResource Border}"
+                    Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+AncestorType=ListView}, Path=ActualWidth, UpdateSourceTrigger=PropertyChanged}">
+            <Border.BorderBrush>
+                <SolidColorBrush x:Name="brdBrush" Color="Black"/>
+            </Border.BorderBrush>
+            <StackPanel Orientation="Vertical">
+
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="{Binding FilterName}" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ShowNumber, UpdateSourceTrigger=PropertyChanged, StringFormat='№{0})'}"/>
+
+                    <StackPanel Orientation="Vertical">
+                        <custControls:Slider LabelText="Diameter:"
+     Margin="20" Value="{Binding Diameter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+     SliderStyle="{StaticResource IntSlider}"
+     Minimum="9" Maximum="100"
+    />
+
+                        <StackPanel Orientation="Vertical">
+                            <custControls:Slider LabelText="Sigma Color:"
+Margin="20" Value="{Binding SigmaColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource FloatSlider}"
+Minimum="1" Maximum="100"/>
+
+                            <custControls:Slider LabelText="Sigma Space:"
+Margin="20" Value="{Binding SigmaSpace, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+SliderStyle="{StaticResource FloatSlider}"
+Minimum="1" Maximum="100"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <TextBlock Style="{StaticResource DescLabel}" Text="Border type:"
+           Margin="10,0,0,0"/>
+                                <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"
+          SelectedItem="{Binding BorderType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+          Margin="10,0,0,0"
+                                      />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                                <Button Content="Apply Filter" Style="{StaticResource SimpleButton}"
+                                    Margin="10,0"
+                                    Command="{Binding OnApplyButtonPressed}"
+                                    />
+                                <Button Content="Remove Filter" Style="{StaticResource SimpleButton}"
+                                    Command="{Binding OnDeleteButtonPressed}"
+                                    />
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsValid, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="OrangeRed" From="Black"
+                                    Storyboard.TargetName="brdBrush"
+                                    Storyboard.TargetProperty="Color"
+                                    Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                        To="Black" From="OrangeRed"
+                        Storyboard.TargetName="brdBrush"
+                        Storyboard.TargetProperty="Color"
+                        Duration="{StaticResource AnimDuration}"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
     <!--#endregion-->

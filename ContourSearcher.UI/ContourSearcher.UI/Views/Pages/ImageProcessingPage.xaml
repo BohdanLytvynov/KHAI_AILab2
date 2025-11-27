@@ -17,7 +17,7 @@
 
         <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <StackPanel Orientation="Vertical" Height="1200">
+                <StackPanel Orientation="Vertical" Height="1500">
 
                     <Frame Content="{Binding HistogramPage}" 
                            NavigationUIVisibility="Hidden"/>

@@ -1,42 +1,44 @@
-﻿using MVVMBase.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Mat = UserControls.Math.Matrix<double>;
+﻿using ContourSearcher.UI.Enums;
+using MVVMBase.Commands;
+using MVVMBase.ViewModels;
+using System.Windows.Input;
 
 namespace ContourSearcher.UI.ViewModels.Models.Filters
 {
     internal abstract class FilterViewModel : ViewModelBase
     {
+        #region Events
+        public event Action<FilterViewModel> OnApplyButtonPressedEvent;
+        public event Action<FilterViewModel> OnDeleteButtonPressedEvent;
+        #endregion
+
         #region Fields
         private int m_showNumber;
-        private Mat m_kernel;
-        private bool m_callGetMatrix;
-        private Action<Mat> m_getMatrix;
         private bool m_isValid;
+
+        private string m_filterName;
+        private NumberDataType m_depth;
+        private int m_kernelRows;
+        private int m_kernelColumns;
+        private int m_anchorX;
+        private int m_anchorY;
+        private bool m_normalize;
+        private FilterBorderType m_borderType;
         #endregion
 
         #region Properties
-        public bool CallGetMatrix
-        {
-            get => m_callGetMatrix;
-            set => Set(ref m_callGetMatrix, value);
-        }
+        public bool ExternalCheck { get; set; }
+        public string FilterName { get => m_filterName; set => Set(ref m_filterName, value); }
 
-        public Action<Mat> GetMatrixFunction
-        {
-            get => m_getMatrix;
-            set => Set(ref m_getMatrix, value);
-        }
+        public NumberDataType Depth { get => m_depth; set => Set(ref m_depth, value); }
+        public int KernelRows { get => m_kernelRows; set => Set(ref m_kernelRows, value); }
+        public int KernelColumns { get => m_kernelColumns; set => Set(ref m_kernelColumns, value); }
+        public int AnchorX { get => m_anchorX; set => Set(ref m_anchorX, value); }
+        public int AnchorY { get => m_anchorY; set => Set(ref m_anchorY, value); }
+        public bool Normalize { get => m_normalize; set => Set(ref m_normalize, value); }
+        public FilterBorderType BorderType { get => m_borderType; set => Set(ref m_borderType, value); }
 
-        public Mat Kernel
-        {
-            get => m_kernel;
-            set => Set(ref m_kernel, value);
-        }
+        public FilterTypes FilterType { get; protected set; }
 
         public int ShowNumber
         {
@@ -51,39 +53,65 @@ namespace ContourSearcher.UI.ViewModels.Models.Filters
         }
         #endregion
 
+        #region Commands
+        public ICommand OnApplyButtonPressed { get; }
+
+        public ICommand OnDeleteButtonPressed { get; }
+        #endregion
+
         #region Ctor
-        public FilterViewModel(int showNumber)
+        protected FilterViewModel(int showNumber)
         {
-            #region Init Fields
+            m_filterName = string.Empty;
             m_showNumber = showNumber;
-            Init();
-            #endregion
+            m_isValid = true;
+            m_kernelColumns = 3;
+            m_kernelRows = 3;
+            m_anchorX = -1;
+            m_anchorY = -1;
+
+            OnApplyButtonPressed = new Command
+                (
+                 OnApplyButtonPressedExecute,
+                 CanOnApplyButtonPressedExecute
+                );
+
+            OnDeleteButtonPressed = new Command
+                (
+                 OnDeleteButtonPressedExecute,
+                 CanOnDeleteButtonPressedExecute
+                );
         }
 
-        public FilterViewModel()
+        protected FilterViewModel() : this(-1)
         {
-            m_showNumber = 0;
-            Init();
+            
         }
         #endregion
 
         #region Methods
-        private void GetMatrix(Mat matrix)
+        protected virtual bool CanOnApplyButtonPressedExecute(object p) => IsValid;
+
+        protected virtual void OnApplyButtonPressedExecute(object p)
         {
-            Kernel = matrix;
+            Check();
+
+            OnApplyButtonPressedEvent?.Invoke(this);
         }
 
-        public Mat GetMatrix()
+        protected virtual bool CanOnDeleteButtonPressedExecute(object p) => true;
+
+        protected virtual void OnDeleteButtonPressedExecute(object p)
         {
-            CallGetMatrix = !CallGetMatrix;
-            return Kernel;
+            OnDeleteButtonPressedEvent?.Invoke(this);
         }
 
-        private void Init()
-        {
-            m_kernel = new Mat(3, 3, 0);
-            m_getMatrix = new Action<Mat>(GetMatrix);
+        public virtual bool Check()
+        { 
+            IsValid = KernelRows > 0 && KernelColumns > 0 && ExternalCheck;
+            return IsValid;
         }
+
         #endregion
     }
 }

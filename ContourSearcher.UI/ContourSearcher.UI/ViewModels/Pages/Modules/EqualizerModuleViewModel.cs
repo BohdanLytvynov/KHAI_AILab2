@@ -158,7 +158,7 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
                         CVSystem.YCrCb_Equalize(ImgNameForProcessing, EqualizationWindowName);
                         break;
                 }
-                CVSystem.DisplayImageInExistingWindow(EqualizationWindowName, EqualizationWindowName);
+                CVSystem.DisplayImageInWindow(EqualizationWindowName, EqualizationWindowName);
                 OnRefreshActiveButtonPressedExecute(null);
             }
             catch (Exception ex)

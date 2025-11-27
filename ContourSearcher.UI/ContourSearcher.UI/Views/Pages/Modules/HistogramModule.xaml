@@ -63,18 +63,18 @@
               IsChecked="{Binding DrawAllInOnePlot, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </StackPanel>
 
-            <custControls:Slider LabelText="Enter width of the Histogram:" Deliminator=","
+            <custControls:Slider LabelText="Enter width of the Histogram:"
                 Margin="20" 
                 Value="{Binding HistWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                 SliderStyle="{StaticResource SliderHistSizeStyle}"
-                FloatValue="False" Minimum="256" Maximum="512"
+                Minimum="256" Maximum="512"
                      />
 
-            <custControls:Slider LabelText="Enter height of the Histogram:" Deliminator=","    
+            <custControls:Slider LabelText="Enter height of the Histogram:"
                 Margin="20" Value="{Binding HistHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                 SliderStyle="{StaticResource SliderHistSizeStyle}"
                 Minimum="256" Maximum="512"
-                FloatValue="False"/>
+                />
 
             <Grid Height="30">
                 <Grid.ColumnDefinitions>

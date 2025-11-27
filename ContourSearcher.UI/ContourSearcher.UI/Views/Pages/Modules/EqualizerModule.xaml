@@ -69,23 +69,23 @@ SelectedItem="{Binding EqualizationType, UpdateSourceTrigger=PropertyChanged, Mo
                 <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Vertical"
                             Visibility="{Binding AddPropertiesVisibility, UpdateSourceTrigger=PropertyChanged}">
 
-                    <custControls:Slider LabelText="Clip Limit:" Deliminator=","
+                    <custControls:Slider LabelText="Clip Limit:"
                         Margin="20" Value="{Binding ClipLimit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         SliderStyle="{StaticResource ClipLimit}"
                         Minimum="2" Maximum="100"
-                        FloatValue="True"/>
+                        />
 
-                    <custControls:Slider LabelText="Grid Tile Width:" Deliminator=","
+                    <custControls:Slider LabelText="Grid Tile Width:"
                         Margin="20" Value="{Binding GridTileWidth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         SliderStyle="{StaticResource TileWidth}"
                         Minimum="8" Maximum="100"
-                        FloatValue="False"/>
+                        />
 
-                    <custControls:Slider LabelText="Grid Tile Height:" Deliminator=","
+                    <custControls:Slider LabelText="Grid Tile Height:"
                         Margin="20" Value="{Binding GridTileHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         SliderStyle="{StaticResource TileWidth}"
                         Minimum="8" Maximum="100"
-                        FloatValue="False"/>
+                        />
                 </StackPanel>
 
                 <Grid Height="30">

@@ -194,6 +194,22 @@
         </Style.Setters>
     </Style>
 
+    <Style x:Key="IntSlider" TargetType="Slider" BasedOn="{StaticResource SliderBaseStyle}">
+        <Style.Setters>
+            <Setter Property="Minimum" Value="8"/>
+            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="TickFrequency" Value="1"/>
+        </Style.Setters>
+    </Style>
+
+    <Style x:Key="FloatSlider" TargetType="Slider" BasedOn="{StaticResource SliderBaseStyle}">
+        <Style.Setters>
+            <Setter Property="Minimum" Value="8"/>
+            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="TickFrequency" Value="0.01"/>
+        </Style.Setters>
+    </Style>
+
     <!--#endregion-->
 
     <!--#region Enums -->
@@ -222,6 +238,20 @@
             ObjectType="{x:Type system:Enum}">
         <ObjectDataProvider.MethodParameters>
             <x:Type Type="{x:Type enums:FilterTypes}"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider x:Key="FilterBorderType" MethodName="GetValues"
+        ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type Type="{x:Type enums:FilterBorderType}"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider x:Key="NumberDataType" MethodName="GetValues"
+    ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type Type="{x:Type enums:NumberDataType}"/>
         </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
     <!--#endregion-->

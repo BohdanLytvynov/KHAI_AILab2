@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace ContourSearcher.UI.Enums
 {
-    public enum FilterTypes
+    internal enum NumberDataType
     {
-        Averaging_Filter = 0,
-        Custom_Filter,
-        Simple_Blur,
-        Gaussian_Blur,
-        Bilateral_Filter
+        Default = -1,
+        CV_8U,
+        CV_8S,
+        CV_16U,
+        CV_16S,
+        CV_32S,
+        CV_32F,
+        CV_64F,
     }
 }

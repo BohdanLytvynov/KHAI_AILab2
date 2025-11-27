@@ -1,9 +1,9 @@
 ﻿namespace ContourSearcher.UI.ViewModels.Models.Filters
 {
-    internal class AveragingFilterViewModel : FilterViewModel
+    internal class SimpleBlurViewModel : FilterViewModel
     {
         #region Fields
-        
+
         #endregion
 
         #region Properties
@@ -11,12 +11,12 @@
         #endregion
 
         #region Ctor
-        public AveragingFilterViewModel(int showNumber) : base(showNumber)
+        public SimpleBlurViewModel(int showNumber) : base(showNumber)
         {
             Init();
         }
 
-        public AveragingFilterViewModel() : base()
+        public SimpleBlurViewModel() : base()
         {
             Init();
         }
@@ -24,8 +24,8 @@
 
         #region Methods
         private void Init()
-        { 
-            FilterType = Enums.FilterTypes.Averaging_Filter;
+        {
+            FilterType = Enums.FilterTypes.Simple_Blur;
             FilterName = FilterType.ToString();
         }
         #endregion
