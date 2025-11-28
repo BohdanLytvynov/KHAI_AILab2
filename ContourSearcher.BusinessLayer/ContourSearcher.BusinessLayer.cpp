@@ -286,14 +286,15 @@ void ContourSearcherBusinessLayer::OpenCV::plotLineHistogram(
 
 void ContourSearcherBusinessLayer::OpenCV::BuildKernel(cv::Mat* res, List<List<Double>^>^ matrix)
 {
-	cv::Mat m(matrix->Count, matrix[0]->Count, CV_8UC1);
+	using namespace cv;
+
+	cv::Mat m(matrix->Count, matrix[0]->Count, CV_64F);
 
 	for (int i = 0; i < matrix->Count; i++)
-	{
-		uchar* image_row = m.ptr<uchar>(i);
+	{		
 		for (int j = 0; j < matrix[i]->Count; j++)
-		{
-			image_row[j] = matrix[i][j];
+		{ 
+			m.at<double>(i, j) = matrix[i][j];
 		}
 	}
 
@@ -336,6 +337,24 @@ void ContourSearcherBusinessLayer::OpenCV::UpdateImageStorage(std::string imgNam
 	{
 		m_ImageNameMap->at(imgName) = img;
 	}
+}
+
+cv::Mat ContourSearcherBusinessLayer::OpenCV::GetGradientMagnitude(cv::Mat xGrad, cv::Mat yGrad)
+{
+	using namespace cv;
+	CV_Assert(xGrad.rows == yGrad.rows && xGrad.cols == yGrad.cols);
+	Mat gradMagnitude = Mat::zeros(xGrad.rows, xGrad.cols, CV_16S);
+	int rows = xGrad.rows;
+	int cols = xGrad.cols;
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			gradMagnitude.at<short>(i, j) = abs(xGrad.at<short>(i, j)) + abs(yGrad.at<short>(i, j));
+		}
+	}
+	
+	return gradMagnitude;
 }
 
 void ContourSearcherBusinessLayer::OpenCV::Draw2DHistogram(
@@ -571,6 +590,7 @@ void ContourSearcherBusinessLayer::OpenCV::Blur(String^ SrcImg, String^ BluringR
 	{
 		Mat srcImg = res->second;
 		Mat output;
+		//Any Number of channels
 		blur(srcImg, output, cv::Size(kernelColumns, kernelRows), cv::Point(anchorX, anchorY), borderType);		
 		UpdateImageStorage(resultName, output);
 	}
@@ -606,11 +626,17 @@ void ContourSearcherBusinessLayer::OpenCV::CustomFilter(String^ SrcImg, String^ 
 	if (res != m_ImageNameMap->end())
 	{
 		Mat srcImg = res->second;
-		Mat output;
+		Mat filterFloat;
+		Mat scaled_8Bit;
 		Mat filterKernel;
 		BuildKernel(&filterKernel, kernel);
-		cv:filter2D(srcImg, output, depth, filterKernel, cv::Point(anchorX, anchorY), delta, borderType);
-		UpdateImageStorage(resultName, output);
+
+		filter2D(srcImg, filterFloat, CV_32F, filterKernel,
+			cv::Point(anchorX, anchorY), delta, borderType);
+
+		convertScaleAbs(filterFloat, scaled_8Bit, 1.0f, 0.0f);
+		
+		UpdateImageStorage(resultName, scaled_8Bit);
 	}
 }
 
@@ -629,6 +655,143 @@ void ContourSearcherBusinessLayer::OpenCV::BilateralFilter(String^ SrcImg, Strin
 		Mat output;		
 		bilateralFilter(srcImg, output, d, sigmaColor, sigmaSpace, borderType);
 		UpdateImageStorage(resultName, output);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::SobelEdgeDetect(
+	String^ srcImg, String^ dstImg, Double threshold, 
+	int kernelSize, Double scale, Double delta, int borderType)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(srcImg);
+	string resultName = MarshalManagedString(dstImg);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat output;
+		Mat xGradient;
+		Mat yGradient;
+
+		int channelsCount = srcImg.channels();
+		Mat imgForProcessing;
+		
+		if (channelsCount > 1)
+		{
+			cvtColor(srcImg, imgForProcessing, cv::COLOR_BGR2GRAY);
+		}
+		else
+		{
+			imgForProcessing = srcImg;
+		}
+
+		//1) Get xGradient
+		Sobel(imgForProcessing, xGradient, CV_16S, 1, 0, kernelSize, scale, delta, borderType);
+		Sobel(imgForProcessing, yGradient, CV_16S, 0, 1, kernelSize, scale, delta, borderType);
+		//2) Get Gradient Magnitude G = |Gx| + |Gy|
+		Mat gradMagn = GetGradientMagnitude(xGradient, yGradient);
+		//3) Get Edges
+		Mat edges = Mat::zeros(gradMagn.rows, gradMagn.cols, CV_8U);
+
+		int rows = gradMagn.rows;
+		int cols = gradMagn.cols;
+
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				//Short cause in Sobel CV_16S -> signed short 
+				if (gradMagn.at<short>(i, j) >= (short)threshold) 
+				{
+					edges.at<uchar>(i, j) = 255;
+				}
+			}
+		}
+
+		UpdateImageStorage(resultName, edges);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::CannyEdgeDetect(String^ srcImg, String^ dstImg, 
+	Double threshold1, Double threshold2, int kernelSize, bool L2Flag)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(srcImg);
+	string resultName = MarshalManagedString(dstImg);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat grayImg;
+		Mat edges;
+		cvtColor(srcImg, grayImg, cv::COLOR_BGR2GRAY);
+
+		Canny(grayImg, edges, threshold1, threshold2, kernelSize, L2Flag);
+
+		UpdateImageStorage(resultName, edges);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::LaplacianEdgeDetect(
+	String^ srcImg, String^ dstImg, int kernelSize, 
+	Double scale, Double Delta, int borderType)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(srcImg);
+	string resultName = MarshalManagedString(dstImg);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat srcImg = res->second;
+		Mat grayImg;
+		Mat edges;
+		cvtColor(srcImg, grayImg, cv::COLOR_BGR2GRAY);
+
+		Laplacian(grayImg, edges, CV_16S, kernelSize, scale, Delta, borderType);
+
+		UpdateImageStorage(resultName, edges);
+	}
+}
+
+void ContourSearcherBusinessLayer::OpenCV::BlobDetect(
+	String^ srcImg, String^ dstImg, bool filterByArea, 
+	float minArea, float maxArea, bool filterByCircularity,
+	float minCircularity, bool filterByColor, unsigned char color)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(srcImg);
+	string resultName = MarshalManagedString(dstImg);
+
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		SimpleBlobDetector::Params blobDetectionParams;
+		blobDetectionParams.filterByArea = filterByArea;
+		blobDetectionParams.minArea = minArea;
+		blobDetectionParams.maxArea = maxArea;
+
+		blobDetectionParams.filterByCircularity = filterByCircularity;
+		blobDetectionParams.minCircularity = minCircularity;
+
+		blobDetectionParams.filterByColor = filterByColor;
+		blobDetectionParams.blobColor = color;
+
+		cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(blobDetectionParams);
+
+		std::vector<cv::KeyPoint> keypoints;
+		detector->detect(res->second, keypoints);
+
+		cv::Mat im_with_keypoints;
+		cv::drawKeypoints(res-> second, keypoints, im_with_keypoints, cv::Scalar(0, 0, 255), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+
+		UpdateImageStorage(resultName, im_with_keypoints);
 	}
 }
 

@@ -52,11 +52,11 @@ Foreground="#FF6B6B6B"/>
                 <Button Content="Apply All" Margin="5,0" Visibility="Collapsed"
                         Command="{Binding OnApplyFiltersButtonPressed}"/>
             </StackPanel>
-            
+            <Border Style="{StaticResource Border}" Margin="5,5,70,5" CornerRadius="10">
                 <ListView Height="600" ItemsSource="{Binding Filters, 
                     UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          />
-            
+                          Margin="5"/>
+            </Border>
         </StackPanel>
     </Grid>
 </Page>

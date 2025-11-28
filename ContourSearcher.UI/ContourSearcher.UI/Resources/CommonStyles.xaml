@@ -254,5 +254,12 @@
             <x:Type Type="{x:Type enums:NumberDataType}"/>
         </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
+
+    <ObjectDataProvider x:Key="EdgeDetectorType" MethodName="GetValues"
+ObjectType="{x:Type system:Enum}">
+        <ObjectDataProvider.MethodParameters>
+            <x:Type Type="{x:Type enums:EdgeDetector}"/>
+        </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
     <!--#endregion-->
 </ResourceDictionary>
