@@ -38,9 +38,10 @@ Width="30"
 Foreground="#FF6B6B6B"/>
                 </Button>
             </StackPanel>
-
-            <TextBlock/>
-
+            <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Vertical">
+                <TextBlock Text="{Binding BlurDetectionResult, UpdateSourceTrigger=PropertyChanged,
+                StringFormat='Calculated Variance of Laplacian: {0}'}" FontSize="18" Margin="10"/>
+            </StackPanel>
             <Grid Height="30">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>

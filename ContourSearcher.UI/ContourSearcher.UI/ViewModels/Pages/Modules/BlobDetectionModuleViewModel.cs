@@ -35,7 +35,10 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
         }
 
         public bool FilterByArea 
-        { get => m_filterByArea; set => Set(ref m_filterByArea, value); }
+        { 
+            get => m_filterByArea; 
+            set => Set(ref m_filterByArea, value);
+        }
 
         public double MinArea 
         { get => m_MinArea; set => Set(ref m_MinArea, value); }

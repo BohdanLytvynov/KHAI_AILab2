@@ -59,7 +59,7 @@ namespace ContourSearcherBusinessLayer {
 		void BlobDetect(String^ srcImg, String^ dstImg, bool filterByArea,
 			float minArea, float maxArea, bool filterByCircularity,
 			float minCircularity, bool filterByColor, unsigned char color);
-
+		Double GetVarianceOfLaplacian(String^ srcImg);
 		List<String^>^ GetActiveWindows();
 	};
 
@@ -97,7 +97,9 @@ namespace ContourSearcherBusinessLayer {
 		void BuildKernel(cv::Mat* res, List<List<Double>^>^ matrix);
 		std::string ChannelIndexToString(int index);
 		void UpdateImageStorage(std::string imgName, cv::Mat img);
-		cv::Mat GetGradientMagnitude(cv::Mat xGrad, cv::Mat yGrad);		
+		cv::Mat GetGradientMagnitude(cv::Mat xGrad, cv::Mat yGrad);
+		float getMean(cv::Mat input);
+		float getVariance(cv::Mat input);
 #pragma endregion
 
 	public:
@@ -155,6 +157,7 @@ namespace ContourSearcherBusinessLayer {
 			float minArea, float maxArea, bool filterByCircularity,
 			float minCircularity, bool filterByColor, unsigned char color) override;
 		virtual List<String^>^ GetActiveWindows() override;
+		virtual Double GetVarianceOfLaplacian(String^ srcImg) override;
 #pragma endregion
 	};
 }

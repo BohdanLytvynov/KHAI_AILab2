@@ -357,6 +357,32 @@ cv::Mat ContourSearcherBusinessLayer::OpenCV::GetGradientMagnitude(cv::Mat xGrad
 	return gradMagnitude;
 }
 
+float ContourSearcherBusinessLayer::OpenCV::getMean(cv::Mat input)
+{
+	int num_elements = (input.rows * input.cols);
+	float sum = 0.0;
+	for (int i = 0; i < input.rows; ++i) {
+		for (int j = 0; j < input.cols; ++j)
+			sum += input.at<float>(i, j);
+	}
+	return (sum / num_elements);
+}
+
+float ContourSearcherBusinessLayer::OpenCV::getVariance(cv::Mat input)
+{
+	float mean = getMean(input);
+	float sum_of_biases = 0.0;
+	int num_of_elements = (input.rows * input.cols);
+	for (int i = 0; i < input.rows; ++i) {
+		for (int j = 0; j < input.cols; ++j) {
+			float element_value = input.at<float>(i, j);
+			sum_of_biases += ((element_value - mean) * (element_value -
+				mean));
+		}
+	}
+	return (sum_of_biases / num_of_elements);
+}
+
 void ContourSearcherBusinessLayer::OpenCV::Draw2DHistogram(
 	String^ imgSrcName,
 	String^ histName,
@@ -793,6 +819,26 @@ void ContourSearcherBusinessLayer::OpenCV::BlobDetect(
 
 		UpdateImageStorage(resultName, im_with_keypoints);
 	}
+}
+
+
+Double ContourSearcherBusinessLayer::OpenCV::GetVarianceOfLaplacian(String^ srcImg)
+{
+	using namespace std;
+	using namespace cv;
+	string srcImgName = MarshalManagedString(srcImg);
+	
+	auto res = m_ImageNameMap->find(srcImgName);
+	if (res != m_ImageNameMap->end())
+	{
+		Mat gray;
+		cvtColor(res->second, gray, CV_BGR2GRAY);
+		Mat laplacian;
+		Laplacian(gray, laplacian, CV_32F);
+		return getVariance(laplacian);
+	}
+
+	return -1;
 }
 
 List<String^>^ ContourSearcherBusinessLayer::OpenCV::GetActiveWindows()

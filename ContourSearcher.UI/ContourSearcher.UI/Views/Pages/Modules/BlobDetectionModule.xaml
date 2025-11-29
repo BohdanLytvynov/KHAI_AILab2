@@ -14,10 +14,11 @@
       d:DataContext="{d:DesignInstance vm:BlobDetectionModuleViewModel, IsDesignTimeCreatable=True}">
 
     <Page.Resources>
-        <Style x:Key="SliderIntSizeStyle" TargetType="Slider" BasedOn="{StaticResource SliderBaseStyle}">
+        <Style x:Key="SliderIntStyle" TargetType="Slider" BasedOn="{StaticResource SliderBaseStyle}">
             <Style.Setters>
-                <Setter Property="TickFrequency" Value="128"/>
-                <Setter Property="Interval" Value="128"/>
+                <Setter Property="TickFrequency" Value="1"/>
+                <Setter Property="Interval" Value="1"/>
+                <Setter Property="Ticks" Value="1"/>
             </Style.Setters>
         </Style>
 
@@ -56,10 +57,11 @@ Foreground="#FF6B6B6B"/>
             </StackPanel>
 
             <CheckBox Content=" Filter by Area" Style="{StaticResource CheckBoxStyle}"
-                      IsChecked="{Binding FilterByArea, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,
-                Converter={StaticResource BoolToVisibilityConverter}}"/>
+                      IsChecked="{Binding FilterByArea, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}">
+            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}"
+                        Visibility="{Binding FilterByArea, UpdateSourceTrigger=PropertyChanged,
+                Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
                 <custControls:Slider LabelText="Min Area: " Maximum="100" Minimum="0" Margin="10"
                      Value="{Binding MinArea, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <custControls:Slider LabelText="Max Area: " Maximum="100" Minimum="0" Margin="10"
@@ -67,21 +69,23 @@ Foreground="#FF6B6B6B"/>
             </StackPanel>
 
             <CheckBox Content=" Filter by Circularity" Style="{StaticResource CheckBoxStyle}"
-          IsChecked="{Binding FilterByCircularity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,
-    Converter={StaticResource BoolToVisibilityConverter}}"/>
+          IsChecked="{Binding FilterByCircularity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}">
+            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}"
+                                Visibility="{Binding FilterByCircularity, UpdateSourceTrigger=PropertyChanged,
+Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
                 <custControls:Slider LabelText="Min Circularity: " Maximum="100" Minimum="0" Margin="10"
      Value="{Binding MinCircularity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </StackPanel>
 
             <CheckBox Content=" Filter by Color" Style="{StaticResource CheckBoxStyle}"
-      IsChecked="{Binding FilterByColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,
-Converter={StaticResource BoolToVisibilityConverter}}"/>
+      IsChecked="{Binding FilterByColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}">
+            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}"
+            Visibility="{Binding FilterByColor, UpdateSourceTrigger=PropertyChanged,
+Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
                 <custControls:Slider LabelText="Color: "
-                                     SliderStyle="{StaticResource SliderIntSizeStyle}"
+                                     SliderStyle="{StaticResource SliderIntStyle}"
                                      Maximum="255" Minimum="0" Margin="10"
                                      Value="{Binding Color, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </StackPanel>
