@@ -163,9 +163,8 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
             }
             catch (Exception ex)
             {
-#if DEBUG
-                throw;
-#endif
+                MessageBox.Show(string.Format(Constants.MODULE_ERROR_MSG, ex.Message),
+                                    Constants.EdgeDetection.Name, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

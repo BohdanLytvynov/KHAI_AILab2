@@ -54,12 +54,6 @@ SliderStyle="{StaticResource FloatSlider}"
 Minimum="-100" Maximum="100"/>
 
                         <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                            <TextBlock Style="{StaticResource DescLabel}" Text="Depth:"
-                             Margin="10,0,0,0"/>
-                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource NumberDataType}}"
-                            SelectedItem="{Binding Depth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                            Margin="10,0,0,0"/>
-
                             <TextBlock Style="{StaticResource DescLabel}" Text="Border type:"
  Margin="10,0,0,0"/>
                             <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"

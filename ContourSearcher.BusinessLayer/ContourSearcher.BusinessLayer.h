@@ -51,8 +51,15 @@ namespace ContourSearcherBusinessLayer {
 			List<List<Double>^>^ kernel, Int32 depth, Int32 anchorX, Int32 anchorY, Double delta,
 			Int32 borderType);
 		void BilateralFilter(String^ SrcImg, String^ BilateralFilterResultName,
-			Int32 d, Double sigmaColor, Double sigmaSpace, Int32 borderType);
-		
+			Int32 d, Double sigmaColor, Double sigmaSpace, Int32 borderType);		
+		void SobelEdgeDetect(String^ srcImg, String^ dstImg, Double threshold, int kernelSize, Double scale, Double delta, int borderType);
+		void CannyEdgeDetect(String^ srcImg, String^ dstImg, Double threshold1, Double threshold2, int kernelSize, bool L2Flag);
+		void LaplacianEdgeDetect(String^ srcImg, String^ dstImg, int kernelSize, Double scale, Double Delta, int borderType);
+
+		void BlobDetect(String^ srcImg, String^ dstImg, bool filterByArea,
+			float minArea, float maxArea, bool filterByCircularity,
+			float minCircularity, bool filterByColor, unsigned char color);
+		Double GetVarianceOfLaplacian(String^ srcImg);
 		List<String^>^ GetActiveWindows();
 	};
 
@@ -90,7 +97,9 @@ namespace ContourSearcherBusinessLayer {
 		void BuildKernel(cv::Mat* res, List<List<Double>^>^ matrix);
 		std::string ChannelIndexToString(int index);
 		void UpdateImageStorage(std::string imgName, cv::Mat img);
-
+		cv::Mat GetGradientMagnitude(cv::Mat xGrad, cv::Mat yGrad);
+		float getMean(cv::Mat input);
+		float getVariance(cv::Mat input);
 #pragma endregion
 
 	public:
@@ -141,8 +150,14 @@ namespace ContourSearcherBusinessLayer {
 			Int32 borderType) override;
 		virtual void BilateralFilter(String^ SrcImg, String^ BilateralFilterResultName, 
 			Int32 d, Double sigmaColor, Double sigmaSpace, Int32 borderType) override;
-
+		virtual void SobelEdgeDetect(String^ srcImg, String^ dstImg, Double threshold, int kernelSize, Double scale, Double delta, int borderType) override;
+		virtual void CannyEdgeDetect(String^ srcImg, String^ dstImg, Double threshold1, Double threshold2, int kernelSize, bool L2Flag) override;
+		virtual void LaplacianEdgeDetect(String^ srcImg, String^ dstImg, int kernelSize, Double scale, Double Delta, int borderType) override;
+		virtual void BlobDetect(String^ srcImg, String^ dstImg, bool filterByArea,
+			float minArea, float maxArea, bool filterByCircularity,
+			float minCircularity, bool filterByColor, unsigned char color) override;
 		virtual List<String^>^ GetActiveWindows() override;
+		virtual Double GetVarianceOfLaplacian(String^ srcImg) override;
 #pragma endregion
 	};
 }

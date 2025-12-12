@@ -103,7 +103,7 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
 
         private void OnAddFilterButtonPressedExecute(object p)
         {
-            FilterViewModel filterViewModel = null;
+            FilterViewModel filterViewModel = null;            
             switch (SelectedFilterName)
             {
                 case FilterTypes.Averaging_Filter:
@@ -145,13 +145,20 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
                 MessageBox.Show("Not all Filters are Valid!", "Contour Searcher", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            ApplyFilter(ImgNameForProcessing, FilteringWindowName, obj);
+            try
+            {
+                ApplyFilter(ImgNameForProcessing, FilteringWindowName, obj);
 
-            CVSystem.DisplayImageInWindow(FilteringWindowName, FilteringWindowName);
-            OnRefreshActiveButtonPressedExecute(null);
-
-            Filters.Remove(obj);
-            RedrawFilterCollection();
+                CVSystem.DisplayImageInWindow(FilteringWindowName, FilteringWindowName);
+                OnRefreshActiveButtonPressedExecute(null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Constants.MODULE_ERROR_MSG, ex.Message),
+                                    Constants.EdgeDetection.Name, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
+            
         }
 
         #endregion

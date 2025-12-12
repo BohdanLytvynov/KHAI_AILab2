@@ -1,0 +1,106 @@
+﻿<Page x:Class="ContourSearcher.UI.Views.Pages.Modules.EdgeDetectionModule"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages.Modules"
+      xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages.Modules"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="EdgeDetectionModule"
+      d:DataContext="{d:DesignInstance vm:EdgeDetectorViewModel, IsDesignTimeCreatable=True}"
+      xmlns:custControls="clr-namespace:UserControls;assembly=UserControls">
+    <Page.Resources>
+        <Style x:Key="SliderIntSizeStyle" TargetType="Slider" BasedOn="{StaticResource SliderBaseStyle}">
+            <Style.Setters>
+                <Setter Property="TickFrequency" Value="128"/>
+                <Setter Property="Interval" Value="128"/>
+            </Style.Setters>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical" MinHeight="450">
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+                <TextBlock Text="{Binding ModuleName}" Style="{StaticResource DescLabel}"/>
+                <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose source image for processing:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+  SelectedItem="{Binding ImgNameForProcessing, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsPressed}"
+ToolTip="Press to update the list of Images that are loaded.">
+                        <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+Height="20"
+Width="30"
+Foreground="#FF6B6B6B"/>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Enter window name to display result:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <TextBox Style="{StaticResource TxtBoxInputStyle}">
+                        <TextBox.Text>
+                            <Binding Path="EdgeDetectionWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel Style="{StaticResource HorizontalStack}">
+                    <Label Content="Choose Edge Detector Type:" Style="{StaticResource InputTxtBoxLabel}"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource EdgeDetectorType}}"
+SelectedItem="{Binding EdgeDetectorType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Style="{StaticResource HorizontalStack}" Orientation="Vertical">
+                    <custControls:Slider LabelText="Threshold1: " Maximum="255" Minimum="0" Margin="10"
+                                         Value="{Binding Threshold1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                         Visibility="{Binding LaplacianParamsVisibility, UpdateSourceTrigger=PropertyChanged}"/>
+                    <custControls:Slider LabelText="Kernel Size: " Minimum="3" Maximum="100"
+                                         SliderStyle="{StaticResource SliderIntSizeStyle}"
+                                         Value="{Binding KernelSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                         Margin="10"/>
+
+                    <StackPanel Orientation="Vertical" x:Name="Sobel"
+                                Visibility="{Binding SobelParamsVisibility, UpdateSourceTrigger=PropertyChanged}">
+                        <custControls:Slider LabelText="Scale: " Minimum="1" Maximum="100"
+                     Value="{Binding Scale, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     Margin="10"/>
+                        <custControls:Slider LabelText="Delta: " Minimum="0" Maximum="100"
+                     Value="{Binding Delta, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     Margin="10"/>
+
+                        <StackPanel Style="{StaticResource HorizontalStack}" Margin="10">
+                            <TextBlock Style="{StaticResource DescLabel}" Text="Border Type:"
+                                Margin="10,0,0,0"/>
+                            <ComboBox MinWidth="100" ItemsSource="{Binding Source={StaticResource FilterBorderType}}"
+                                SelectedItem="{Binding FilterBorderType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" x:Name="Canny"
+                                Visibility="{Binding CannyParamsVisibility, UpdateSourceTrigger=PropertyChanged}">
+                        <custControls:Slider LabelText="Threshold2: " Maximum="255" Minimum="0" Margin="10"
+                     Value="{Binding Threshold2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}" Content="L2 Flag"
+                                  IsChecked="{Binding L2Factor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                </StackPanel>
+                <Grid Height="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Calculate" Grid.Column="1" Style="{StaticResource SimpleButton}"
+  Command="{Binding OnCalculateButtonPressed}"/>
+                </Grid>
+            </StackPanel>
+    </Grid>
+</Page>

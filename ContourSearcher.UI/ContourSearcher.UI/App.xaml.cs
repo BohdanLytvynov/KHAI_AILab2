@@ -40,6 +40,9 @@ namespace ContourSearcher.UI
                 c.AddSingleton<HistogramModuleViewModel>();
                 c.AddSingleton<EqualizerModuleViewModel>();
                 c.AddSingleton<FilteringModuleViewModel>();
+                c.AddSingleton<EdgeDetectorViewModel>();
+                c.AddSingleton<BlobDetectionModuleViewModel>();
+                c.AddSingleton<BlurDetectionModuleViewModel>();
 
                 //Add Views
                 c.AddTransient(p =>
@@ -66,9 +69,13 @@ namespace ContourSearcher.UI
                 c.AddSingleton<ImageProcessingPage>();
                 c.AddSingleton<ContourSearcherPage>();
                 c.AddSingleton<ConfigurationPage>();
+                //Add Pages for Modules
                 c.AddSingleton<HistogramModule>();
                 c.AddSingleton<EqualizerModule>();
                 c.AddSingleton<FilteringModule>();
+                c.AddSingleton<EdgeDetectionModule>();
+                c.AddSingleton<BlobDetectionModule>();
+                c.AddSingleton<BlurDetectionModule>();
             });
 
             var provider = ServiceWrapper.ServiceProvider;
@@ -80,6 +87,9 @@ namespace ContourSearcher.UI
             ConfigureVM(typeof(HistogramModule), typeof(HistogramModuleViewModel), pm, provider);
             ConfigureVM(typeof(EqualizerModule), typeof(EqualizerModuleViewModel), pm, provider);
             ConfigureVM(typeof(FilteringModule), typeof(FilteringModuleViewModel), pm, provider);
+            ConfigureVM(typeof(EdgeDetectionModule), typeof(EdgeDetectorViewModel), pm, provider);
+            ConfigureVM(typeof(BlobDetectionModule), typeof(BlobDetectionModuleViewModel), pm, provider);
+            ConfigureVM(typeof(BlurDetectionModule), typeof(BlurDetectionModuleViewModel), pm, provider);
 
             //2 Pages Configuration
             ConfigureVM(typeof(LoadImagePage), typeof(LoadImagePageViewModel), pm, provider);

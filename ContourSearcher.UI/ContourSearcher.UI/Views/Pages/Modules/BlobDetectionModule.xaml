@@ -1,0 +1,104 @@
+﻿<Page x:Class="ContourSearcher.UI.Views.Pages.Modules.BlobDetectionModule"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages.Modules"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      xmlns:custControls="clr-namespace:UserControls;assembly=UserControls"
+      xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages.Modules"
+      xmlns:conv="clr-namespace:UserControls.Converters;assembly=UserControls" 
+      Title="BlobDetectionModule"
+      d:DataContext="{d:DesignInstance vm:BlobDetectionModuleViewModel, IsDesignTimeCreatable=True}">
+
+    <Page.Resources>
+        <Style x:Key="SliderIntStyle" TargetType="Slider" BasedOn="{StaticResource SliderBaseStyle}">
+            <Style.Setters>
+                <Setter Property="TickFrequency" Value="1"/>
+                <Setter Property="Interval" Value="1"/>
+                <Setter Property="Ticks" Value="1"/>
+            </Style.Setters>
+        </Style>
+
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Page.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical" MinHeight="450">
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <TextBlock Text="{Binding ModuleName}" Style="{StaticResource DescLabel}"/>
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+            <StackPanel Style="{StaticResource HorizontalStack}">
+                <Label Content="Choose source image for processing:" Style="{StaticResource InputTxtBoxLabel}"/>
+                <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+  SelectedItem="{Binding ImgNameForProcessing, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsPressed}"
+ToolTip="Press to update the list of Images that are loaded.">
+                    <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+Height="20"
+Width="30"
+Foreground="#FF6B6B6B"/>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource HorizontalStack}">
+                <Label Content="Enter window name to display result:" Style="{StaticResource InputTxtBoxLabel}"/>
+                <TextBox Style="{StaticResource TxtBoxInputStyle}">
+                    <TextBox.Text>
+                        <Binding Path="BlobDetectionWindowName" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+
+            <CheckBox Content=" Filter by Area" Style="{StaticResource CheckBoxStyle}"
+                      IsChecked="{Binding FilterByArea, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}"
+                        Visibility="{Binding FilterByArea, UpdateSourceTrigger=PropertyChanged,
+                Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
+                <custControls:Slider LabelText="Min Area: " Maximum="100" Minimum="0" Margin="10"
+                     Value="{Binding MinArea, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <custControls:Slider LabelText="Max Area: " Maximum="100" Minimum="0" Margin="10"
+                     Value="{Binding MaxArea, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <CheckBox Content=" Filter by Circularity" Style="{StaticResource CheckBoxStyle}"
+          IsChecked="{Binding FilterByCircularity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}"
+                                Visibility="{Binding FilterByCircularity, UpdateSourceTrigger=PropertyChanged,
+Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
+                <custControls:Slider LabelText="Min Circularity: " Maximum="100" Minimum="0" Margin="10"
+     Value="{Binding MinCircularity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <CheckBox Content=" Filter by Color" Style="{StaticResource CheckBoxStyle}"
+      IsChecked="{Binding FilterByColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+            <StackPanel Orientation="Vertical" Style="{StaticResource HorizontalStack}"
+            Visibility="{Binding FilterByColor, UpdateSourceTrigger=PropertyChanged,
+Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}">
+                <custControls:Slider LabelText="Color: "
+                                     SliderStyle="{StaticResource SliderIntStyle}"
+                                     Maximum="255" Minimum="0" Margin="10"
+                                     Value="{Binding Color, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <Grid Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Calculate" Grid.Column="1" Style="{StaticResource SimpleButton}"
+  Command="{Binding OnCalculateButtonPressed}"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>
