@@ -86,7 +86,7 @@ SelectedItem="{Binding EdgeDetectorType, UpdateSourceTrigger=PropertyChanged, Mo
                     <StackPanel Orientation="Vertical" x:Name="Canny"
                                 Visibility="{Binding CannyParamsVisibility, UpdateSourceTrigger=PropertyChanged}">
                         <custControls:Slider LabelText="Threshold2: " Maximum="255" Minimum="0" Margin="10"
-                     Value="{Binding Threshold1, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                     Value="{Binding Threshold2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         <CheckBox Style="{StaticResource CheckBoxStyle}" Content="L2 Flag"
                                   IsChecked="{Binding L2Factor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>

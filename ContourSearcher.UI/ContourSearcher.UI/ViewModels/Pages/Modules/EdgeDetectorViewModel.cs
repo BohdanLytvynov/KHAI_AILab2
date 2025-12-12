@@ -150,6 +150,7 @@ namespace ContourSearcher.UI.ViewModels.Pages.Modules
                         CVSystem.CannyEdgeDetect(ImgNameForProcessing, EdgeDetectionWindowName, Threshold1, Threshold2, (int)KernelSize, L2Factor);
                         break;
                     case EdgeDetector.Laplacian:
+                        CVSystem.LaplacianEdgeDetect(ImgNameForProcessing, EdgeDetectionWindowName, (int)KernelSize, Scale, Delta, (int)FilterBorderType);
                         break;
                 }
 
