@@ -43,6 +43,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<EdgeDetectorViewModel>();
                 c.AddSingleton<BlobDetectionModuleViewModel>();
                 c.AddSingleton<BlurDetectionModuleViewModel>();
+                c.AddSingleton<SkinDiseaseDetectionPageViewModel>();
 
                 //Add Views
                 c.AddTransient(p =>
@@ -69,6 +70,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<ImageProcessingPage>();
                 c.AddSingleton<ContourSearcherPage>();
                 c.AddSingleton<ConfigurationPage>();
+                c.AddSingleton<SkinDiseaseDetectionPage>();
                 //Add Pages for Modules
                 c.AddSingleton<HistogramModule>();
                 c.AddSingleton<EqualizerModule>();
@@ -96,6 +98,7 @@ namespace ContourSearcher.UI
             ConfigureVM(typeof(ImageProcessingPage), typeof(ImageProcessingViewModel), pm, provider);
             ConfigureVM(typeof(ContourSearcherPage), typeof(ContourSearcherViewModel), pm, provider);
             ConfigureVM(typeof(ConfigurationPage), typeof(ConfigurationViewModel), pm, provider);
+            ConfigureVM(typeof(SkinDiseaseDetectionPage), typeof(SkinDiseaseDetectionPageViewModel), pm, provider);
 
             mainWindow.Show();
             pm.Switch(nameof(LoadImagePage));
