@@ -8,9 +8,24 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SkinDiseaseDetectionPage"
-      d:DataContext="{d:DesignInstance vm:SkinDiseaseDetectionPageViewModel, IsDesignTimeCreatable=True}">
+      d:DataContext="{d:DesignInstance vm:SkinDiseaseDetectionPageViewModel, IsDesignTimeCreatable=True}"
+      Background="White">
 
     <Grid>
-        <TextBlock Text="{Binding Test}" FontSize="28"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Style="{StaticResource MainBorderStyle}">
+            <ScrollViewer VerticalScrollBarVisibility="Visible">
+                <StackPanel Orientation="Vertical" Height="1500">
+
+                    
+
+                    <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Page>

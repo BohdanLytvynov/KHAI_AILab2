@@ -44,6 +44,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<BlobDetectionModuleViewModel>();
                 c.AddSingleton<BlurDetectionModuleViewModel>();
                 c.AddSingleton<SkinDiseaseDetectionPageViewModel>();
+                c.AddSingleton<SkinDiseaseDetectionModuleViewModel>();
 
                 //Add Views
                 c.AddTransient(p =>
@@ -78,6 +79,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<EdgeDetectionModule>();
                 c.AddSingleton<BlobDetectionModule>();
                 c.AddSingleton<BlurDetectionModule>();
+                c.AddSingleton<SkinDiseaseDetectionModule>();
             });
 
             var provider = ServiceWrapper.ServiceProvider;
@@ -92,6 +94,7 @@ namespace ContourSearcher.UI
             ConfigureVM(typeof(EdgeDetectionModule), typeof(EdgeDetectorViewModel), pm, provider);
             ConfigureVM(typeof(BlobDetectionModule), typeof(BlobDetectionModuleViewModel), pm, provider);
             ConfigureVM(typeof(BlurDetectionModule), typeof(BlurDetectionModuleViewModel), pm, provider);
+            ConfigureVM(typeof(SkinDiseaseDetectionModule), typeof(SkinDiseaseDetectionModuleViewModel), pm, provider);
 
             //2 Pages Configuration
             ConfigureVM(typeof(LoadImagePage), typeof(LoadImagePageViewModel), pm, provider);
