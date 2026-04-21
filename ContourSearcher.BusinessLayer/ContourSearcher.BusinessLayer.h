@@ -61,6 +61,7 @@ namespace ContourSearcherBusinessLayer {
 			float minCircularity, bool filterByColor, unsigned char color);
 		Double GetVarianceOfLaplacian(String^ srcImg);
 		List<String^>^ GetActiveWindows();
+		array<Byte>^ GetImageForSkinDiseaseScanner(String^ imgName, int sizeX, int sizeY, bool useDebug, String^ debugImgName);
 	};
 
 
@@ -100,6 +101,10 @@ namespace ContourSearcherBusinessLayer {
 		cv::Mat GetGradientMagnitude(cv::Mat xGrad, cv::Mat yGrad);
 		float getMean(cv::Mat input);
 		float getVariance(cv::Mat input);
+
+		array<Byte>^ Mat2ByteArray(cv::Mat mat);
+
+		void SaveDebugImageForSkinDiseaseScanner(const std::string& imgName, cv::Mat mat);
 #pragma endregion
 
 	public:
@@ -158,6 +163,7 @@ namespace ContourSearcherBusinessLayer {
 			float minCircularity, bool filterByColor, unsigned char color) override;
 		virtual List<String^>^ GetActiveWindows() override;
 		virtual Double GetVarianceOfLaplacian(String^ srcImg) override;
+		virtual array<Byte>^ GetImageForSkinDiseaseScanner(String^ imgName, int sizeX, int sizeY, bool useDebug, String^ debugImgName) override;
 #pragma endregion
 	};
 }

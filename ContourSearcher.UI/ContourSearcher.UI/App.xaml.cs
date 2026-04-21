@@ -11,6 +11,11 @@ using ServiceWrapperLib;
 using ContourSearcherBusinessLayer;
 using ContourSearcher.UI.ViewModels.Pages.Modules;
 using ContourSearcher.UI.Views.Pages.Modules;
+using CSharpBusinessLayer.ML.DiseaseClassifier.Base;
+using CSharpBusinessLayer.ML.DiseaseClassifier.Skin;
+using System.Configuration;
+using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace ContourSearcher.UI
 {
@@ -23,11 +28,23 @@ namespace ContourSearcher.UI
         {
             base.OnStartup(e);
 
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException; ;
+
             ServiceWrapper.Init();
 
             ServiceWrapper.ConfigureServices(c =>
             {
                 c.AddSingleton<ICVSystem, OpenCV>();
+                c.AddSingleton<IDiseaseClassifier>(c =>
+                {
+                    var section = ConfigurationManager.GetSection("SkinDiseaseScanner") as NameValueCollection;
+                    string[] labels = section["labels"]?.Split(",").Select(s => char.ToUpper(s[0]) + s.Substring(1)).ToArray() ?? throw new Exception("Fail to get labels from the configuration file!");
+                    string pathToRoot = AppContext.BaseDirectory;
+                    string pathToModel = pathToRoot + section["relPathToModel"];
+                    string input = section["input"] ?? throw new Exception("Unable to get name of the Input Node!");
+                    return new SkinDiseaseClassifier(pathToModel, labels, 224,224, input);
+                });
 
                 c.AddSingleton<IPageManager, PageManager>();
 
@@ -43,6 +60,8 @@ namespace ContourSearcher.UI
                 c.AddSingleton<EdgeDetectorViewModel>();
                 c.AddSingleton<BlobDetectionModuleViewModel>();
                 c.AddSingleton<BlurDetectionModuleViewModel>();
+                c.AddSingleton<SkinDiseaseDetectionPageViewModel>();
+                c.AddSingleton<SkinDiseaseDetectionModuleViewModel>();
 
                 //Add Views
                 c.AddTransient(p =>
@@ -57,8 +76,10 @@ namespace ContourSearcher.UI
                     view.Closed += (object s, EventArgs e) =>
                     {
                         var cv = p.GetRequiredService<ICVSystem>();
-
                         (cv as IDisposable)!.Dispose();
+
+                        var skinDiseaseClassifier = p.GetRequiredService<IDiseaseClassifier>();
+                        (skinDiseaseClassifier as IDiseaseClassifier)!.Dispose();
                     };
                     
                     return view;
@@ -69,6 +90,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<ImageProcessingPage>();
                 c.AddSingleton<ContourSearcherPage>();
                 c.AddSingleton<ConfigurationPage>();
+                c.AddSingleton<SkinDiseaseDetectionPage>();
                 //Add Pages for Modules
                 c.AddSingleton<HistogramModule>();
                 c.AddSingleton<EqualizerModule>();
@@ -76,6 +98,7 @@ namespace ContourSearcher.UI
                 c.AddSingleton<EdgeDetectionModule>();
                 c.AddSingleton<BlobDetectionModule>();
                 c.AddSingleton<BlurDetectionModule>();
+                c.AddSingleton<SkinDiseaseDetectionModule>();
             });
 
             var provider = ServiceWrapper.ServiceProvider;
@@ -90,16 +113,37 @@ namespace ContourSearcher.UI
             ConfigureVM(typeof(EdgeDetectionModule), typeof(EdgeDetectorViewModel), pm, provider);
             ConfigureVM(typeof(BlobDetectionModule), typeof(BlobDetectionModuleViewModel), pm, provider);
             ConfigureVM(typeof(BlurDetectionModule), typeof(BlurDetectionModuleViewModel), pm, provider);
+            ConfigureVM(typeof(SkinDiseaseDetectionModule), typeof(SkinDiseaseDetectionModuleViewModel), pm, provider);
 
             //2 Pages Configuration
             ConfigureVM(typeof(LoadImagePage), typeof(LoadImagePageViewModel), pm, provider);
             ConfigureVM(typeof(ImageProcessingPage), typeof(ImageProcessingViewModel), pm, provider);
             ConfigureVM(typeof(ContourSearcherPage), typeof(ContourSearcherViewModel), pm, provider);
             ConfigureVM(typeof(ConfigurationPage), typeof(ConfigurationViewModel), pm, provider);
+            ConfigureVM(typeof(SkinDiseaseDetectionPage), typeof(SkinDiseaseDetectionPageViewModel), pm, provider);
 
             mainWindow.Show();
             pm.Switch(nameof(LoadImagePage));
             pm.Switch(nameof(ConfigurationPage), Frames.Right);
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = (Exception)e.ExceptionObject;
+#if DEBUG
+            if (ex != null)
+            {
+                Debug.WriteLine($"Critical background error: {ex.Message}");
+            }
+#endif
+        }
+
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            string errorMessage = $"Error occurred: {e.Exception.Message}";
+            MessageBox.Show(errorMessage, "Unhandled error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            e.Handled = true;
         }
 
         private void ConfigureVM(Type view, Type viewModel, 

@@ -37,6 +37,10 @@
                           IsChecked="{Binding ContourSearcherEnabled, 
                 UpdateSourceTrigger=PropertyChanged}"
                 Content="Detectors" Margin="10,0,0,0"/>
+                <ToggleButton Margin="10,0,0,0" Content="Disease Scanner"
+                              Style="{StaticResource SimpleTogleButton}"
+                              IsChecked="{Binding DiseaseScannerEnabled, UpdateSourceTrigger=PropertyChanged}"
+                              Command="{Binding OnSkinDiseaseScannerPressed}"/>
             </StackPanel>
             <Frame x:Name="Main" Grid.Row="1" Margin="0,10,0,0"
                Content="{Binding Frame, 

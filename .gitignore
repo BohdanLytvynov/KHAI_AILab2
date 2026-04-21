@@ -435,3 +435,19 @@ FodyWeavers.xsd
 .vs/
 ContourSearcher.UI/ContourSearcher.UI/.vs
 
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Temp models
+temp_saved_model/
+exported_model/
+
+# System Files
+.DS_Store
+Thumbs.db

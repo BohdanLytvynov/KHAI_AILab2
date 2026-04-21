@@ -37,6 +37,12 @@
             public const string Name = "Blur Detection";
         }
 
+        internal static class SkinDiseaseDetection
+        {
+            public const string Name = "Skin Disease Detection";
+            public const string DiagnosisDefault = "Not estimated yet.";
+        }
+
         public const string ORIGINAL_IMAGE_NAME = "Original";
         public const string SMOOTHED_IMAGE_NAME = "Smoothed Image";
         public const string DEFAULT_INPUT_VALUE = "";

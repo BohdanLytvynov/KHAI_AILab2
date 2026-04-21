@@ -12,16 +12,14 @@ namespace ContourSearcher.UI.ViewModels
     internal class MainWindowViewModel : TitledViewModel
     {
         #region Fields
-        //Dictionary<string, string> m_PathToTemp;
-        //private bool m_ImagesSync;
-
-        private Task m_CleanImagesTask;
 
         private bool m_LoadImageEnabled;
 
         private bool m_ImageProcessingEnabled;
 
         private bool m_ContourSearchEnabled;
+
+        private bool m_DiseaseScannerEnabled;
 
         private IPageManager m_pageManager;
 
@@ -51,6 +49,9 @@ namespace ContourSearcher.UI.ViewModels
         public bool ContourSearcherEnabled 
         { get=>m_ContourSearchEnabled; set=>Set(ref m_ContourSearchEnabled, value); }
 
+        public bool DiseaseScannerEnabled
+        { get => m_DiseaseScannerEnabled; set => Set(ref m_DiseaseScannerEnabled, value); }
+
         #endregion
 
         #region Commands
@@ -60,6 +61,8 @@ namespace ContourSearcher.UI.ViewModels
         public ICommand OnImageProcessTabButton { get; }
 
         public ICommand OnSearchContoursTabPressed { get; }
+
+        public ICommand OnSkinDiseaseScannerPressed { get; }
         #endregion
 
         #region Ctor
@@ -80,28 +83,9 @@ namespace ContourSearcher.UI.ViewModels
             m_LoadImageEnabled = true;
             m_ImageProcessingEnabled = false;
             m_ContourSearchEnabled = false;
+            m_DiseaseScannerEnabled = false;
             m_Frame = new object();
             m_rightFrame = new object();
-            //m_PathToTemp = new Dictionary<string, string>();
-            //m_ImagesSync = false;
-            //var pathToCurrent = Environment.CurrentDirectory;
-            //var pathToTempFolder = pathToCurrent + Path.DirectorySeparatorChar + "Temp";
-
-            //IOHelper.CreateDirectoryIfNotExists(pathToTempFolder);
-
-            //AddToTempFilePath(CLEAN_IMAGE_TEMP, pathToTempFolder + Path.DirectorySeparatorChar + "ImageClean.txt");
-
-            
-            //Set up Timer
-            m_CleanImagesTask = new Task(() =>
-            {
-                var timer = new System.Timers.Timer(TimeSpan.FromSeconds(30));
-                timer.Enabled = false;
-                timer.AutoReset = true;
-                timer.Elapsed += Timer_Elapsed;
-
-                timer.Start();
-            });
 
             #endregion
 
@@ -123,35 +107,15 @@ namespace ContourSearcher.UI.ViewModels
                     OnSearchContourTabPressedExecute,
                     CanOnSearchContourTabPressedExecute
                 );
+
+            OnSkinDiseaseScannerPressed = new Command
+                (
+                    OnSkinDiseaseScannerButtonPressedExecute,
+                    CanOnSkinDiseaseScannerPressedExecute
+                );
             #endregion
         }
 
-        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (true)
-            {
-                //m_ImagesSync = true;
-
-                //OpenCVWrapper.CallImagesCleanUp(m_PathToTemp[CLEAN_IMAGE_TEMP]);
-
-                //var imgs = IOHelper.ReadFromFile(m_PathToTemp[CLEAN_IMAGE_TEMP]);
-
-                //if (!string.IsNullOrEmpty(imgs))
-                //{ 
-                //    var arr = imgs.Split(',');
-
-                //    foreach (var image in arr)
-                //    {
-                //        QueueJobToDispatcher(() =>
-                //        { 
-                //            //WindowNames.Remove(image);
-                //        });
-                //    }
-                //}
-                
-                //m_ImagesSync = false;
-            }
-        }
         #endregion
 
         #region Methods
@@ -188,6 +152,7 @@ namespace ContourSearcher.UI.ViewModels
             LoadImageEnabled = true;
             ImageProcessingEnabled = false;
             ContourSearcherEnabled = false;
+            DiseaseScannerEnabled = false;
             m_pageManager.Switch(nameof(LoadImagePage));
         }
         #endregion
@@ -201,6 +166,7 @@ namespace ContourSearcher.UI.ViewModels
             LoadImageEnabled = false;
             ImageProcessingEnabled = true;
             ContourSearcherEnabled = false;
+            DiseaseScannerEnabled = false;
             m_pageManager.Switch(nameof(ImageProcessingPage));
         }
 
@@ -215,9 +181,23 @@ namespace ContourSearcher.UI.ViewModels
             LoadImageEnabled = false;
             ImageProcessingEnabled = false;
             ContourSearcherEnabled = true;
+            DiseaseScannerEnabled = false;
             m_pageManager.Switch(nameof(ContourSearcherPage));
         }
 
+        #endregion
+
+        #region On Skin Disease Scanner Pressed
+        private bool CanOnSkinDiseaseScannerPressedExecute(object p) => true;
+
+        private void OnSkinDiseaseScannerButtonPressedExecute(object p)
+        { 
+            LoadImageEnabled = false;
+            ImageProcessingEnabled = false;
+            ContourSearcherEnabled = false;
+            DiseaseScannerEnabled = true;
+            m_pageManager.Switch(nameof(SkinDiseaseDetectionPage));
+        }
         #endregion
 
         #endregion
