@@ -383,6 +383,30 @@ float ContourSearcherBusinessLayer::OpenCV::getVariance(cv::Mat input)
 	return (sum_of_biases / num_of_elements);
 }
 
+array<Byte>^ ContourSearcherBusinessLayer::OpenCV::Mat2ByteArray(cv::Mat mat)
+{
+	if (mat.empty()) return nullptr;
+
+	int dataSize = mat.total() * mat.elemSize();
+	array<Byte>^ managedArray = gcnew array<Byte>(dataSize);
+
+	pin_ptr<Byte> pDest = &managedArray[0];
+	unsigned char* destPtr = reinterpret_cast<unsigned char*>(pDest);
+
+	std::memcpy(destPtr, mat.data, dataSize);
+	return managedArray;
+}
+
+void ContourSearcherBusinessLayer::OpenCV::SaveDebugImageForSkinDiseaseScanner(const std::string& imgName, cv::Mat mat)
+{
+	using namespace std;
+	using namespace cv;
+
+	Mat bgr;
+	cv::cvtColor(mat, bgr, CV_BGR2RGB);
+	m_ImageNameMap->insert(pair<string, cv::Mat>(imgName, bgr));
+}
+
 void ContourSearcherBusinessLayer::OpenCV::Draw2DHistogram(
 	String^ imgSrcName,
 	String^ histName,
@@ -839,6 +863,42 @@ Double ContourSearcherBusinessLayer::OpenCV::GetVarianceOfLaplacian(String^ srcI
 	}
 
 	return -1;
+}
+
+array<Byte>^ ContourSearcherBusinessLayer::OpenCV::GetImageForSkinDiseaseScanner(
+	String^ imgName, int sizeX, int sizeY, bool useDebug, String^ debugImgName)
+{
+	using namespace std;
+	using namespace cv;
+	string imgNameStr = MarshalManagedString(imgName);
+	string imgDebugName = MarshalManagedString(debugImgName);
+
+	auto res = m_ImageNameMap->find(imgNameStr);
+
+	if (res != m_ImageNameMap->end())
+	{
+		Mat img = res->second;
+
+		Mat rgbMat;
+		cvtColor(img, rgbMat, CV_BGR2RGB);
+
+		if (!rgbMat.isContinuous()) {
+			rgbMat = rgbMat.clone();
+		}
+
+		Size cvSize(sizeX,sizeY);
+		Mat resized;
+		resize(rgbMat, resized, cvSize);
+
+		if (useDebug)
+		{
+			SaveDebugImageForSkinDiseaseScanner(imgDebugName, resized);
+		}
+
+		return Mat2ByteArray(resized);
+	}
+
+	return nullptr;
 }
 
 List<String^>^ ContourSearcherBusinessLayer::OpenCV::GetActiveWindows()

@@ -40,6 +40,7 @@
         internal static class SkinDiseaseDetection
         {
             public const string Name = "Skin Disease Detection";
+            public const string DiagnosisDefault = "Not estimated yet.";
         }
 
         public const string ORIGINAL_IMAGE_NAME = "Original";

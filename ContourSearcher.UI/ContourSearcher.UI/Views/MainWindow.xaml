@@ -37,7 +37,7 @@
                           IsChecked="{Binding ContourSearcherEnabled, 
                 UpdateSourceTrigger=PropertyChanged}"
                 Content="Detectors" Margin="10,0,0,0"/>
-                <ToggleButton Margin="10,0,0,0" Content="Skin Disease Scanner"
+                <ToggleButton Margin="10,0,0,0" Content="Disease Scanner"
                               Style="{StaticResource SimpleTogleButton}"
                               IsChecked="{Binding DiseaseScannerEnabled, UpdateSourceTrigger=PropertyChanged}"
                               Command="{Binding OnSkinDiseaseScannerPressed}"/>

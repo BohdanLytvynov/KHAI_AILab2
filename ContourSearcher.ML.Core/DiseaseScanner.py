@@ -271,6 +271,7 @@ os.system(f"python -m tf2onnx.convert --saved-model {export_path} --output disea
 if os.path.exists("disease_scanner.onnx"):
     print("\nModel ready for usage in a C++.")
     print(f"Path to file: {os.path.abspath('disease_scanner.onnx')}")
+    print("Copy it to APP.CONFIG:", ",".join(train_ds.class_names))
 else:
     print("\nError!")
 

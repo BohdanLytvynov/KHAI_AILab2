@@ -5,12 +5,72 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ContourSearcher.UI.Views.Pages.Modules"
       xmlns:vm="clr-namespace:ContourSearcher.UI.ViewModels.Pages.Modules"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SkinDiseaseDetectionModule"
       d:DataContext="{d:DesignInstance vm:SkinDiseaseDetectionModuleViewModel, IsDesignTimeCreatable=True}">
 
     <Grid>
-        
+        <StackPanel Orientation="Vertical">
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+            <TextBlock Text="{Binding ModuleName}" Style="{StaticResource DescLabel}"/>
+            <Rectangle Style="{StaticResource BorderRectStyle}"/>
+
+            <StackPanel Style="{StaticResource HorizontalStack}">
+                <Label Content="Choose source image for processing:" Style="{StaticResource InputTxtBoxLabel}"/>
+                <ComboBox ItemsSource="{Binding ActiveWindows, UpdateSourceTrigger=PropertyChanged}"
+  SelectedItem="{Binding ImgNameForProcessing, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <Button Margin="20,0,0,0" Command="{Binding OnRefreshActiveWindowsPressed}"
+ToolTip="Press to update the list of Images that are loaded.">
+                    <fa5:SvgAwesome Icon="Solid_RedoAlt" 
+Height="20"
+Width="30"
+Foreground="#FF6B6B6B"/>
+                </Button>
+            </StackPanel>
+
+            <CheckBox Margin="10,5,0,5" Style="{StaticResource CheckBoxStyle}" Content="Enable Debug"
+                      IsChecked="{Binding DebugEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <StackPanel Style="{StaticResource HorizontalStack}" Margin="20,0,0,0"
+                        Visibility="{Binding DebugImageNameVisibility, UpdateSourceTrigger=PropertyChanged}">
+                <Label Content="- Please Enter the window name to display Debug Image:" Style="{StaticResource InputTxtBoxLabel}"/>
+                <TextBox Style="{StaticResource TxtBoxInputStyle}" Margin="10,0,0,0">
+                    <TextBox.Text>
+                        <Binding Path="DebugImageName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+
+            <StackPanel Margin="35,35,35,30" Orientation="Vertical" Visibility="{Binding ChartVisibility, UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock Text="Prediction Distribution Chart" HorizontalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
+                <lvc:CartesianChart 
+                    Series="{Binding Series, UpdateSourceTrigger=PropertyChanged}"
+                    XAxes="{Binding XAxes, UpdateSourceTrigger=PropertyChanged}"
+                    YAxes="{Binding YAxes, UpdateSourceTrigger=PropertyChanged}"
+                    Height="300" />
+            </StackPanel>
+
+            <StackPanel Margin="21,0,30,30" Style="{StaticResource HorizontalStack}">
+                <TextBlock FontSize="18" Text="{Binding Diagnosis, UpdateSourceTrigger=PropertyChanged, StringFormat='Predicted Disease: {0}'}"/>
+            </StackPanel>
+
+            <Grid Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Calculate" Grid.Column="1" Style="{StaticResource SimpleButton}"
+Command="{Binding OnCalculateButtonPressed}"/>
+            </Grid>
+
+        </StackPanel>
     </Grid>
 </Page>

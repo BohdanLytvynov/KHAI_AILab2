@@ -20,7 +20,8 @@
             <ScrollViewer VerticalScrollBarVisibility="Visible">
                 <StackPanel Orientation="Vertical" Height="1500">
 
-                    
+                    <Frame Content="{Binding SkinDiseasePage}"
+                           NavigationUIVisibility="Hidden"/>
 
                     <Rectangle Style="{StaticResource BorderRectStyle}"/>
 
