@@ -128,6 +128,8 @@ train_ds = train_ds.map(
     lambda x, y: (data_augmentation(x, training=True), y)
 )
 
+class_names_str = ",".join(train_ds.class_names)
+
 #Optimize Dataset Performance
 train_ds = train_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
@@ -271,7 +273,8 @@ os.system(f"python -m tf2onnx.convert --saved-model {export_path} --output disea
 if os.path.exists("disease_scanner.onnx"):
     print("\nModel ready for usage in a C++.")
     print(f"Path to file: {os.path.abspath('disease_scanner.onnx')}")
-    print("Copy it to APP.CONFIG:", ",".join(train_ds.class_names))
+    print("Add this to APP.CONFIG'S SECTION: ")
+    print(class_names_str)
 else:
     print("\nError!")
 
