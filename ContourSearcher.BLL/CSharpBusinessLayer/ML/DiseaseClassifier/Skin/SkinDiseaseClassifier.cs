@@ -68,8 +68,6 @@ namespace CSharpBusinessLayer.ML.DiseaseClassifier.Skin
                  NamedOnnxValue.CreateFromTensor(m_inputName, inputTensor)
             };
 
-            int maxIndex = -1;
-
             float[] output = null;
 
             using (var results = m_inferenceSession.Run(inputs))
